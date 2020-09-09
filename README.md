@@ -1,1 +1,1 @@
-# time-series-labeling-tool
+# Time series labeling tool
