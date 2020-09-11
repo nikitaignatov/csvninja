@@ -1,4 +1,4 @@
-# Time series labeling tool
+# Csv Ninja
 
 ## Project setup
 ```
