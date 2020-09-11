@@ -1,5 +1,5 @@
 {
-  "name": "time-series-labeling-tool",
+  "name": "csvninja",
   "version": "0.1.0",
   "private": true,
   "scripts": {

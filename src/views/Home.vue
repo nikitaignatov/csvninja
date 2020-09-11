@@ -1,6 +1,7 @@
 <template>
   <div class="home">
-    <HelloWorld msg="Welcome to Your Vue.js App" />
+    <h1>Csv Ninja</h1>
+    <HelloWorld />
   </div>
 </template>
 
