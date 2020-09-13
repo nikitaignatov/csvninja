@@ -11,14 +11,23 @@
       <option disabled value="0">Please select one</option>
       <option v-for="label in labels" :key="label" v-bind:value="label">{{label}}</option>
     </select>
-    <div v-for="s in series" :key="s.name">
-      <apexchart :options="options" height="160" width="800" v-if="contains(s.name)" :series="[s]"></apexchart>
+    <button @click="annotateData">annotate</button>
+    <div>
+      <apexchart
+        :options="options"
+        height="300"
+        width="800"
+        :series="series.filter(x=>contains(x.name))"
+      ></apexchart>
     </div>
+    <h2>Output</h2>
+    <pre>{{output}}</pre>
   </div>
 </template>
 
 <script>
 import _ from "lodash";
+const LABEL = "label";
 
 export default {
   name: "HelloWorld",
@@ -30,25 +39,55 @@ export default {
       return _.includes(this.columns, s);
     },
     onSelection: function(chartContext, { xaxis, yaxis }) {
-      console.log(chartContext, xaxis, yaxis);
-      console.log(
-        this.selectedLabel,
-        Math.round(xaxis.min),
-        Math.round(xaxis.max)
-      );
-      for (var i = Math.round(xaxis.min); i < xaxis.max; i++) {
-        this.data[3][i] = this.selectedLabel;
+      if (!yaxis) return;
+      this.range = { from: Math.round(xaxis.min), to: Math.round(xaxis.max) };
+    },
+    annotateData: function() {
+      for (var i = this.range.from; i < this.range.to; i++) {
+        this.data[this.headers.indexOf(LABEL)][i] = this.selectedLabel;
       }
-      console.log(this.data[3]);
-      var csv = _.unzip(this.data).map(x => x.join(","));
+      this.convert();
+      this.addAnnotation();
+    },
+    addAnnotation: function() {
+      var m = this.options.annotations.xaxis;
+      console.log("ann", m);
+      m.push({
+        x: this.range.from,
+        x2: this.range.to,
+        fillColor: "#B3F7CA",
+        label: {
+          text: this.selectedLabel
+        }
+      });
+      this.options = {
+        annotations: {
+          xaxis: m
+        }
+      };
+    },
+    convert: function() {
+      var data = _.unzip(this.data);
+      var csv = data.map(x => x.join(","));
       csv = _.concat(this.headers.join(","), csv);
       csv = csv.join("\n");
-      this.input = csv;
+      this.output = csv;
     }
   },
   computed: {
+    annotations: function() {
+      return [];
+    },
     data: function() {
-      return this.converted.map(x => x.slice(1));
+      var xs = this.converted.map(x => x.slice(1));
+      for (var i = 0; i < xs[0].length; i++) {
+        if (xs[this.headers.indexOf(LABEL)]) {
+          xs[this.headers.indexOf(LABEL)][i] = this.labels[0];
+        } else {
+          xs.push([this.labels[0]]);
+        }
+      }
+      return xs;
     },
     series: function() {
       var data = this.data;
@@ -61,7 +100,12 @@ export default {
       return _.zip.apply(_, lines);
     },
     headers: function() {
-      return this.converted.map(x => x.slice(0, 1)[0]);
+      var xs = this.converted.map(x => x.slice(0, 1)[0]);
+      if (xs.indexOf(LABEL) < 0) {
+        xs.push(LABEL);
+      }
+      console.log(xs);
+      return xs;
     },
     labels: function() {
       return this.labelsInput.split("\n");
@@ -69,26 +113,30 @@ export default {
   },
   data: function() {
     return {
+      range: { from: null, to: null },
       labelsInput: "unknown\nrest\nswing up\nswing down\nswitch hand",
+      output: "no labels",
       input:
-        "x,y,z,label\n30,10,5\n40,2,44\n50,21,24\n50,21,24\n50,21,24\n5,21,24\n30,21,24\n50,21,24\n51,21,24\n10,21,24",
+        "x,y,z,label\n1,10,5\n2,2,44\n3,21,24\n5,21,24\n7,20,4\n5,18,4\n4,14,4\n2,21,2\n1,19,2\n2,21,5\n3,17,5\n3.5,12,1\n4,8,7\n5,1,30\n6,5,24\n7,12,17\n8,19,1\n9,21,3\n10,17,9\n11,19,2\n10,20,-4\n6,29,-9\n3,26,-1\n2,32,5\n4,33,12\n8,15,18",
       columns: [],
       selectedLabel: 0,
       options: {
+        annotations: { xaxis: [] },
         dataLabels: {
           enabled: false
         },
         stroke: {
-          curve: "straight"
+          curve: "straight",
+          width: 1
         },
         markers: {
-          size: 4
+          size: 0
         },
         chart: {
-          height: 60,
+          height: 160,
           id: "vuechart-example.1",
           group: "items",
-          type: "area",
+          type: "line",
           toolbar: {
             show: true,
             offsetX: 0,
@@ -108,39 +156,19 @@ export default {
             enabled: true,
             type: "x",
             fill: {
-              color: "#24292e",
+              color: "#222",
               opacity: 0.1
             },
             stroke: {
               width: 1,
               dashArray: 3,
-              color: "#24292e",
+              color: "#000",
               opacity: 0.4
-            },
-            xaxis: {
-              min: undefined,
-              max: undefined
-            },
-            yaxis: {
-              min: undefined,
-              max: undefined
             }
           },
           zoom: {
             enabled: true,
-            type: "x",
-            autoScaleYaxis: false,
-            zoomedArea: {
-              fill: {
-                color: "#90CAF9",
-                opacity: 0.4
-              },
-              stroke: {
-                color: "#0D47A1",
-                opacity: 0.4,
-                width: 1
-              }
-            }
+            type: "x"
           },
           events: {
             selection: this.onSelection,
@@ -151,11 +179,6 @@ export default {
         },
         xaxis: {
           type: "numeric"
-        },
-        yaxis: {
-          labels: {
-            minWidth: 40
-          }
         }
       }
     };
