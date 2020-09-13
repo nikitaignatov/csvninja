@@ -20,6 +20,9 @@
         :series="series.filter(x=>contains(x.name))"
       ></apexchart>
     </div>
+    <div v-for="s in series" :key="s.name">
+      <apexchart :options="options" height="160" width="800" v-if="contains(s.name)" :series="[s]"></apexchart>
+    </div>
     <h2>Output</h2>
     <pre>{{output}}</pre>
   </div>
@@ -47,24 +50,47 @@ export default {
         this.data[this.headers.indexOf(LABEL)][i] = this.selectedLabel;
       }
       this.convert();
-      this.addAnnotation();
+      this.renderAnnotations();
     },
-    addAnnotation: function() {
+    renderAnnotations: function() {
       var m = this.options.annotations.xaxis;
       console.log("ann", m);
-      m.push({
-        x: this.range.from,
-        x2: this.range.to,
-        fillColor: "#B3F7CA",
-        label: {
-          text: this.selectedLabel
+      m = [];
+      var labelIndex = this.headers.indexOf(LABEL);
+      var labels = this.data[labelIndex];
+      console.log("labels", labels);
+      var start = 0;
+      for (var i = 0; i < labels.length; i++) {
+        if (i > 0) {
+          var same = labels[i] === labels[i - 1];
+          if (!same) {
+            m.push({
+              x: start,
+              x2: i,
+              fillColor: this.colors[this.labels.indexOf(labels[i - 1])],
+              label: {
+                text: labels[i - 1]
+              }
+            });
+            start = i;
+          } else if (i === labels.length - 1) {
+            m.push({
+              x: start,
+              x2: i + 1,
+              fillColor: this.colors[this.labels.indexOf(labels[i - 1])],
+              label: {
+                text: labels[i]
+              }
+            });
+          }
         }
-      });
-      this.options = {
+      }
+      this.$set(this, "options", {
+        ...this.options,
         annotations: {
           xaxis: m
         }
-      };
+      });
     },
     convert: function() {
       var data = _.unzip(this.data);
@@ -75,19 +101,23 @@ export default {
     }
   },
   computed: {
-    annotations: function() {
-      return [];
-    },
     data: function() {
       var xs = this.converted.map(x => x.slice(1));
       for (var i = 0; i < xs[0].length; i++) {
         if (xs[this.headers.indexOf(LABEL)]) {
-          xs[this.headers.indexOf(LABEL)][i] = this.labels[0];
+          if (!xs[this.headers.indexOf(LABEL)][i]) {
+            xs[this.headers.indexOf(LABEL)][i] = this.labels[0];
+          }
         } else {
           xs.push([this.labels[0]]);
         }
       }
       return xs;
+    },
+    colors: function() {
+      return "#008FFB #00E396 #FEB019 #FF4560 #775DD0 #33B2DF #546E7A #D4526E #13D8AA #A5978B".split(
+        " "
+      );
     },
     series: function() {
       var data = this.data;
