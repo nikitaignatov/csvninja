@@ -1,6 +1,6 @@
 <template>
   <div class="hello">
-    <textarea v-model="input" rows="5" cols="80" @change="x=>read(x.target.value)"></textarea>
+    <textarea :value="input" rows="5" cols="80" @change="x=>read(x.target.value)" :placeholder="example"></textarea>
     <textarea v-model="labelsInput" rows="5" cols="80"></textarea>
     <br />
     <select v-model="columns" multiple>
@@ -50,7 +50,7 @@ export default {
     },
     annotateData: function() {
       for (var i = this.range.from; i < this.range.to; i++) {
-        this.data[this.headers.indexOf(LABEL)][i] = this.selectedLabel;
+        this.data2[this.headers.indexOf(LABEL)][i] = this.selectedLabel;
       }
       this.convert();
       this.renderAnnotations();
@@ -60,7 +60,7 @@ export default {
       console.log("ann", m);
       m = [];
       var labelIndex = this.headers.indexOf(LABEL);
-      var labels = this.data[labelIndex];
+      var labels = this.data2[labelIndex];
       console.log("labels", labels);
       var start = 0;
       for (var i = 0; i < labels.length; i++) {
@@ -96,7 +96,7 @@ export default {
       });
     },
     convert: function() {
-      var data = _.unzip(this.data);
+      var data = _.unzip(this.data2);
       var csv = data.map(x => x.join(","));
       csv = _.concat(this.headers.join(","), csv);
       csv = csv.join("\n");
@@ -104,18 +104,19 @@ export default {
     }
   },
   computed: {
-    ...mapState("csv", ["output"]),
-    data: function() {
+    ...mapState("csv", ["output", "input", "data", "headers", "example"]),
+    data2: function() {
       var xs = this.converted.map(x => x.slice(1));
-      for (var i = 0; i < xs[0].length; i++) {
-        if (xs[this.headers.indexOf(LABEL)]) {
-          if (!xs[this.headers.indexOf(LABEL)][i]) {
-            xs[this.headers.indexOf(LABEL)][i] = this.labels[0];
+      if (xs.length > 0)
+        for (var i = 0; i < xs[0].length; i++) {
+          if (xs[this.headers.indexOf(LABEL)]) {
+            if (!xs[this.headers.indexOf(LABEL)][i]) {
+              xs[this.headers.indexOf(LABEL)][i] = this.labels[0];
+            }
+          } else {
+            xs.push([this.labels[0]]);
           }
-        } else {
-          xs.push([this.labels[0]]);
         }
-      }
       return xs;
     },
     colors: function() {
@@ -124,22 +125,13 @@ export default {
       );
     },
     series: function() {
-      var data = this.data;
+      var data = this.data2;
       return this.headers.map((x, i) => {
         return { name: x, data: data[i] };
       });
     },
     converted: function() {
-      var lines = this.input.split("\n").map(x => x.split(","));
-      return _.zip.apply(_, lines);
-    },
-    headers: function() {
-      var xs = this.converted.map(x => x.slice(0, 1)[0]);
-      if (xs.indexOf(LABEL) < 0) {
-        xs.push(LABEL);
-      }
-      console.log(xs);
-      return xs;
+      return _.zip.apply(_, this.data);
     },
     labels: function() {
       return this.labelsInput.split("\n");
@@ -149,8 +141,6 @@ export default {
     return {
       range: { from: null, to: null },
       labelsInput: "unknown\nrest\nswing up\nswing down\nswitch hand",
-      input:
-        "x,y,z,label\n1,10,5\n2,2,44\n3,21,24\n5,21,24\n7,20,4\n5,18,4\n4,14,4\n2,21,2\n1,19,2\n2,21,5\n3,17,5\n3.5,12,1\n4,8,7\n5,1,30\n6,5,24\n7,12,17\n8,19,1\n9,21,3\n10,17,9\n11,19,2\n10,20,-4\n6,29,-9\n3,26,-1\n2,32,5\n4,33,12\n8,15,18",
       columns: [],
       selectedLabel: 0,
       options: {
