@@ -9,7 +9,7 @@
     ></textarea>
     <textarea v-model="labelsInput" rows="5" cols="80"></textarea>
     <br />
-    <select v-model="columns" multiple>
+    <select v-model="columnsInput" multiple>
       <option disabled value="0">Please select one</option>
       <option v-for="column in headers" :key="column" v-bind:value="column">{{column}}</option>
     </select>
@@ -53,68 +53,40 @@ export default {
   },
   methods: {
     ...mapActions("csv", ["read", "write"]),
-    ...mapActions("annotation", ["select"]),
+    ...mapActions("annotation", [
+      "select",
+      "renderAnnotations",
+      "selectColumns"
+    ]),
     contains: function(s) {
-      return _.includes(this.columns, s);
+      return _.includes(this.columnsInput, s);
     },
     annotateData: function() {
       for (var i = this.range.from; i < this.range.to; i++) {
         this.data2[this.headers.indexOf(LABEL)][i] = this.selectedLabel;
       }
-      
-      this.convert();
-      this.renderAnnotations();
-    },
-    renderAnnotations: function() {
-      var m = this.options.annotations.xaxis;
-      console.log("ann", m);
-      m = [];
-      var labelIndex = this.headers.indexOf(LABEL);
-      var labels = this.data2[labelIndex];
-      console.log("labels", labels);
-      var start = 0;
-      for (var i = 0; i < labels.length; i++) {
-        if (i > 0) {
-          var same = labels[i] === labels[i - 1];
-          if (!same) {
-            m.push({
-              x: start,
-              x2: i,
-              fillColor: this.colors[this.labels.indexOf(labels[i - 1])],
-              label: {
-                text: labels[i - 1]
-              }
-            });
-            start = i;
-          } else if (i === labels.length - 1) {
-            m.push({
-              x: start,
-              x2: i + 1,
-              fillColor: this.colors[this.labels.indexOf(labels[i - 1])],
-              label: {
-                text: labels[i]
-              }
-            });
-          }
-        }
-      }
-      this.$set(this, "options", {
-        ...this.options,
-        annotations: {
-          xaxis: m
-        }
-      });
-    },
-    convert: function() {
-      var csv = data.map(x => x.join(","));
-      csv = _.concat(this.headers.join(","), csv);
-      csv = csv.join("\n");
-      this.output = csv;
+      var data = _.unzip(this.data2);
+      this.write(data);
+      this.renderAnnotations({ data2: this.data2, headers: this.headers });
     }
   },
   computed: {
     ...mapState("csv", ["output", "input", "data", "headers", "example"]),
-    ...mapState("annotation", ["colors", "range"]),
+    ...mapState("annotation", [
+      "colors",
+      "range",
+      "labelsInput",
+      "selectedLabel",
+      "columns"
+    ]),
+    columnsInput: {
+      get: function() {
+        return this.columns;
+      },
+      set: function(x) {
+        this.selectColumns(x);
+      }
+    },
     ...mapGetters("annotation", {
       options: "getOptions"
     }),
@@ -146,11 +118,7 @@ export default {
     }
   },
   data: function() {
-    return {
-      labelsInput: "unknown\nrest\nswing up\nswing down\nswitch hand",
-      columns: [],
-      selectedLabel: 0
-    };
+    return {};
   }
 };
 </script> 

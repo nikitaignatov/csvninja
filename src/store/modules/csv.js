@@ -28,7 +28,8 @@ export default {
                 }
             }
         },
-        write(state) {
+        write(state, payload) {
+            if (payload) state.data = payload
             if (state.data) {
                 state.output = stringify(state.data, {
                     header: true, columns: state.headers
@@ -37,13 +38,13 @@ export default {
         }
     },
     actions: {
-        read: function ({ commit }, csv) {
-            commit('load', csv)
+        read: function ({ commit }, payload) {
+            commit('load', payload)
             commit('parse')
             commit('write')
         },
-        write: function ({ commit }, output) {
-            commit('write', output)
+        write: function ({ commit }, payload) {
+            commit('write', payload)
         }
     },
     getters: {}
