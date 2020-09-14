@@ -20,14 +20,20 @@
     <button @click="annotateData">annotate</button>
     <div>
       <apexchart
-        :options="options(onSelection)"
+        :options="options(select)"
         height="300"
         width="800"
         :series="series.filter(x=>contains(x.name))"
       ></apexchart>
     </div>
     <div v-for="s in series" :key="s.name">
-      <apexchart :options="options(onSelection)" height="160" width="800" v-if="contains(s.name)" :series="[s]"></apexchart>
+      <apexchart
+        :options="options(select)"
+        height="160"
+        width="800"
+        v-if="contains(s.name)"
+        :series="[s]"
+      ></apexchart>
     </div>
     <h2>Output</h2>
     <pre>{{output}}</pre>
@@ -47,17 +53,15 @@ export default {
   },
   methods: {
     ...mapActions("csv", ["read", "write"]),
+    ...mapActions("annotation", ["select"]),
     contains: function(s) {
       return _.includes(this.columns, s);
-    },
-    onSelection: function(chartContext, { xaxis, yaxis }) {
-      if (!yaxis) return;
-      this.range = { from: Math.round(xaxis.min), to: Math.round(xaxis.max) };
     },
     annotateData: function() {
       for (var i = this.range.from; i < this.range.to; i++) {
         this.data2[this.headers.indexOf(LABEL)][i] = this.selectedLabel;
       }
+      
       this.convert();
       this.renderAnnotations();
     },
@@ -102,7 +106,6 @@ export default {
       });
     },
     convert: function() {
-      var data = _.unzip(this.data2);
       var csv = data.map(x => x.join(","));
       csv = _.concat(this.headers.join(","), csv);
       csv = csv.join("\n");
@@ -111,6 +114,7 @@ export default {
   },
   computed: {
     ...mapState("csv", ["output", "input", "data", "headers", "example"]),
+    ...mapState("annotation", ["colors", "range"]),
     ...mapGetters("annotation", {
       options: "getOptions"
     }),
@@ -128,11 +132,6 @@ export default {
         }
       return xs;
     },
-    colors: function() {
-      return "#008FFB #00E396 #FEB019 #FF4560 #775DD0 #33B2DF #546E7A #D4526E #13D8AA #A5978B".split(
-        " "
-      );
-    },
     series: function() {
       var data = this.data2;
       return this.headers.map((x, i) => {
@@ -148,7 +147,6 @@ export default {
   },
   data: function() {
     return {
-      range: { from: null, to: null },
       labelsInput: "unknown\nrest\nswing up\nswing down\nswitch hand",
       columns: [],
       selectedLabel: 0

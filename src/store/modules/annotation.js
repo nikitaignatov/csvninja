@@ -1,6 +1,8 @@
 export default {
     namespaced: true,
     state: () => ({
+        range: { from: null, to: null },
+        colors: "#008FFB #00E396 #FEB019 #FF4560 #775DD0 #33B2DF #546E7A #D4526E #13D8AA #A5978B".split(" "),
         options: {
             annotations: { xaxis: [] },
             dataLabels: {
@@ -51,13 +53,6 @@ export default {
                     type: "x"
                 },
                 events: {
-                    selection: function (chartContext, { xaxis, yaxis }) {
-                        if (!yaxis) return;
-                        this.range = { from: Math.round(xaxis.min), to: Math.round(xaxis.max) };
-                    },
-                    zoomed: function (chartContext, { xaxis, yaxis }) {
-                        console.log(chartContext, xaxis, yaxis);
-                    }
                 }
             },
             xaxis: {
@@ -66,12 +61,25 @@ export default {
         }
     }),
     mutations: {
+        selected: function (state, payload) {
+            state.range.from = Math.round(payload.min)
+            state.range.to = Math.round(payload.max)
+        },
     },
     actions: {
+        select: function ({ commit }, payload) {
+            console.log(payload)
+            commit('selected', payload)
+        },
     },
     getters: {
         getOptions: (state) => (selection) => {
-            state.options.chart.events = { selection }
+            state.options.chart.events = {
+                selection: function (chartContext, { xaxis, yaxis }) {
+                    if (!yaxis) return;
+                    selection(xaxis)
+                }
+            }
             return state.options
         }
     }
