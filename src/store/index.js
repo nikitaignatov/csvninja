@@ -1,14 +1,20 @@
 import Vue from "vue";
 import Vuex from "vuex";
-import VueApexCharts from 'vue-apexcharts'
-
-Vue.component('apexchart', VueApexCharts)
+import CsvModule from "./modules/csv";
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
-  state: {},
-  mutations: {},
-  actions: {},
-  modules: {}
+    modules: {
+        csv: CsvModule
+    },
+    state: {
+        selection: { from: null, to: null },
+        annotations: [],
+        input: '',
+        outpus: '',
+        labels: []
+    },
+    mutations: {},
+    actions: {},
 });

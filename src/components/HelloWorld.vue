@@ -1,6 +1,6 @@
 <template>
   <div class="hello">
-    <textarea v-model="input" rows="5" cols="80"></textarea>
+    <textarea v-model="input" rows="5" cols="80" @change="x=>read(x.target.value)"></textarea>
     <textarea v-model="labelsInput" rows="5" cols="80"></textarea>
     <br />
     <select v-model="columns" multiple>
@@ -29,15 +29,18 @@
 </template>
 
 <script>
+import { mapActions, mapState } from "vuex";
+
 import _ from "lodash";
 const LABEL = "label";
 
 export default {
-  name: "HelloWorld",
+  name: "Annotations",
   props: {
     msg: String
   },
   methods: {
+    ...mapActions("csv", ["read", "write"]),
     contains: function(s) {
       return _.includes(this.columns, s);
     },
@@ -101,6 +104,7 @@ export default {
     }
   },
   computed: {
+    ...mapState("csv", ["output"]),
     data: function() {
       var xs = this.converted.map(x => x.slice(1));
       for (var i = 0; i < xs[0].length; i++) {
@@ -145,7 +149,6 @@ export default {
     return {
       range: { from: null, to: null },
       labelsInput: "unknown\nrest\nswing up\nswing down\nswitch hand",
-      output: "no labels",
       input:
         "x,y,z,label\n1,10,5\n2,2,44\n3,21,24\n5,21,24\n7,20,4\n5,18,4\n4,14,4\n2,21,2\n1,19,2\n2,21,5\n3,17,5\n3.5,12,1\n4,8,7\n5,1,30\n6,5,24\n7,12,17\n8,19,1\n9,21,3\n10,17,9\n11,19,2\n10,20,-4\n6,29,-9\n3,26,-1\n2,32,5\n4,33,12\n8,15,18",
       columns: [],
@@ -163,7 +166,6 @@ export default {
           size: 0
         },
         chart: {
-          height: 160,
           id: "vuechart-example.1",
           group: "items",
           type: "line",
