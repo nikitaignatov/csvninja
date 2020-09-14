@@ -1,6 +1,12 @@
 <template>
   <div class="hello">
-    <textarea :value="input" rows="5" cols="80" @change="x=>read(x.target.value)" :placeholder="example"></textarea>
+    <textarea
+      :value="input"
+      rows="5"
+      cols="80"
+      @change="x=>read(x.target.value)"
+      :placeholder="example"
+    ></textarea>
     <textarea v-model="labelsInput" rows="5" cols="80"></textarea>
     <br />
     <select v-model="columns" multiple>
@@ -14,14 +20,14 @@
     <button @click="annotateData">annotate</button>
     <div>
       <apexchart
-        :options="options"
+        :options="options(onSelection)"
         height="300"
         width="800"
         :series="series.filter(x=>contains(x.name))"
       ></apexchart>
     </div>
     <div v-for="s in series" :key="s.name">
-      <apexchart :options="options" height="160" width="800" v-if="contains(s.name)" :series="[s]"></apexchart>
+      <apexchart :options="options(onSelection)" height="160" width="800" v-if="contains(s.name)" :series="[s]"></apexchart>
     </div>
     <h2>Output</h2>
     <pre>{{output}}</pre>
@@ -29,7 +35,7 @@
 </template>
 
 <script>
-import { mapActions, mapState } from "vuex";
+import { mapActions, mapGetters, mapState } from "vuex";
 
 import _ from "lodash";
 const LABEL = "label";
@@ -105,6 +111,9 @@ export default {
   },
   computed: {
     ...mapState("csv", ["output", "input", "data", "headers", "example"]),
+    ...mapGetters("annotation", {
+      options: "getOptions"
+    }),
     data2: function() {
       var xs = this.converted.map(x => x.slice(1));
       if (xs.length > 0)
@@ -142,67 +151,7 @@ export default {
       range: { from: null, to: null },
       labelsInput: "unknown\nrest\nswing up\nswing down\nswitch hand",
       columns: [],
-      selectedLabel: 0,
-      options: {
-        annotations: { xaxis: [] },
-        dataLabels: {
-          enabled: false
-        },
-        stroke: {
-          curve: "straight",
-          width: 1
-        },
-        markers: {
-          size: 0
-        },
-        chart: {
-          id: "vuechart-example.1",
-          group: "items",
-          type: "line",
-          toolbar: {
-            show: true,
-            offsetX: 0,
-            offsetY: 0,
-            tools: {
-              download: true,
-              selection: true,
-              zoom: true,
-              zoomin: false,
-              zoomout: false,
-              pan: true,
-              reset: true
-            },
-            autoSelected: "selection"
-          },
-          selection: {
-            enabled: true,
-            type: "x",
-            fill: {
-              color: "#222",
-              opacity: 0.1
-            },
-            stroke: {
-              width: 1,
-              dashArray: 3,
-              color: "#000",
-              opacity: 0.4
-            }
-          },
-          zoom: {
-            enabled: true,
-            type: "x"
-          },
-          events: {
-            selection: this.onSelection,
-            zoomed: function(chartContext, { xaxis, yaxis }) {
-              console.log(chartContext, xaxis, yaxis);
-            }
-          }
-        },
-        xaxis: {
-          type: "numeric"
-        }
-      }
+      selectedLabel: 0
     };
   }
 };
