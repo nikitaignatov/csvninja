@@ -60,9 +60,7 @@ export default {
     state: () => ({
         range: { from: null, to: null },
 
-        labelsInput: "unknown\nrest\nswing up\nswing down\nswitch hand",
         columns: [],
-        selectedLabel: 0,
         //
         colors: "#008FFB #00E396 #FEB019 #FF4560 #775DD0 #33B2DF #546E7A #D4526E #13D8AA #A5978B".split(" "),
         options
@@ -87,6 +85,7 @@ export default {
         },
         renderAnnotations: function ({ state }, payload) {
             var m = state.options.annotations.xaxis;
+            state.labels = payload.labels
             console.log("ann", m);
             m = [];
             var labelIndex = payload.headers.indexOf(LABEL);
@@ -118,11 +117,7 @@ export default {
                     }
                 }
             }
-            state.options = {
-                annotations: {
-                    xaxis: m
-                }
-            };
+            state.options.annotations.xaxis = m
         }
     },
     getters: {

@@ -59,7 +59,7 @@ export default {
       "selectColumns"
     ]),
     contains: function(s) {
-      return _.includes(this.columnsInput, s);
+      return _.includes(this.columns, s);
     },
     annotateData: function() {
       for (var i = this.range.from; i < this.range.to; i++) {
@@ -67,18 +67,19 @@ export default {
       }
       var data = _.unzip(this.data2);
       this.write(data);
-      this.renderAnnotations({ data2: this.data2, headers: this.headers });
+      this.renderAnnotations({
+        data2: this.data2,
+        headers: this.headers,
+        labels: this.labels
+      });
     }
   },
   computed: {
+    ...mapGetters("annotation", {
+      options: "getOptions"
+    }),
     ...mapState("csv", ["output", "input", "data", "headers", "example"]),
-    ...mapState("annotation", [
-      "colors",
-      "range",
-      "labelsInput",
-      "selectedLabel",
-      "columns"
-    ]),
+    ...mapState("annotation", ["colors", "range", "columns"]),
     columnsInput: {
       get: function() {
         return this.columns;
@@ -87,9 +88,6 @@ export default {
         this.selectColumns(x);
       }
     },
-    ...mapGetters("annotation", {
-      options: "getOptions"
-    }),
     data2: function() {
       var xs = this.converted.map(x => x.slice(1));
       if (xs.length > 0)
@@ -118,7 +116,10 @@ export default {
     }
   },
   data: function() {
-    return {};
+    return {
+      labelsInput: "unknown\nrest\nswing up\nswing down\nswitch hand",
+      selectedLabel: 0
+    };
   }
 };
 </script> 
