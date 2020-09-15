@@ -1,3 +1,5 @@
+import _ from "lodash";
+
 const LABEL = 'label'
 const options = {
     annotations: { xaxis: [] },
@@ -59,6 +61,7 @@ export default {
     namespaced: true,
     state: () => ({
         range: { from: null, to: null },
+        data: [],
 
         columns: [],
         //
@@ -66,31 +69,44 @@ export default {
         options
     }),
     mutations: {
+        annotated: function (state, payload) {
+            state.options = {
+                ...state.options,
+                annotations: { xaxis: payload }
+            }
+        },
+        converted: function (state, payload) {
+            state.data = payload
+        },
         selected: function (state, payload) {
             state.range.from = Math.round(payload.min)
             state.range.to = Math.round(payload.max)
         },
         selectColumns: function (state, payload) {
-            console.log(payload)
             state.columns = payload
         },
     },
     actions: {
+        convert: function ({ commit }, payload) {
+            commit('converted', _.zip.apply(_, payload))
+        },
         select: function ({ commit }, payload) {
-            console.log(payload)
             commit('selected', payload)
         },
         selectColumns: function ({ commit }, payload) {
             commit('selectColumns', payload)
         },
-        renderAnnotations: function ({ state }, payload) {
+        annotate: function ({ state }, payload) {
+            for (var i = state.range.from; i < state.range.to; i++) {
+                state.data[state.headers.indexOf(LABEL)][i] = payload;
+            }
+        },
+        renderAnnotations: function ({ state, commit }, payload) {
             var m = state.options.annotations.xaxis;
             state.labels = payload.labels
-            console.log("ann", m);
             m = [];
             var labelIndex = payload.headers.indexOf(LABEL);
             var labels = payload.data2[labelIndex];
-            console.log("labels", labels);
             var start = 0;
             for (var i = 0; i < labels.length; i++) {
                 if (i > 0) {
@@ -117,7 +133,7 @@ export default {
                     }
                 }
             }
-            state.options.annotations.xaxis = m
+            commit('annotated', m)
         }
     },
     getters: {

@@ -20,17 +20,15 @@
     <button @click="annotateData">annotate</button>
     <div>
       <apexchart
-        :options="options(select)"
+        :options="selection"
         height="300"
-        width="800"
         :series="series.filter(x=>contains(x.name))"
       ></apexchart>
     </div>
     <div v-for="s in series" :key="s.name">
       <apexchart
-        :options="options(select)"
+        :options="selection"
         height="160"
-        width="800"
         v-if="contains(s.name)"
         :series="[s]"
       ></apexchart>
@@ -56,7 +54,8 @@ export default {
     ...mapActions("annotation", [
       "select",
       "renderAnnotations",
-      "selectColumns"
+      "selectColumns",
+      "convert"
     ]),
     contains: function(s) {
       return _.includes(this.columns, s);
@@ -79,7 +78,16 @@ export default {
       options: "getOptions"
     }),
     ...mapState("csv", ["output", "input", "data", "headers", "example"]),
-    ...mapState("annotation", ["colors", "range", "columns"]),
+    ...mapState("annotation", {
+      colors: "colors",
+      range: "range",
+      columns: "columns",
+      chartData: "data"
+    }),
+
+    selection: function() {
+      return this.options(this.select);
+    },
     columnsInput: {
       get: function() {
         return this.columns;
@@ -89,7 +97,9 @@ export default {
       }
     },
     data2: function() {
-      var xs = this.converted.map(x => x.slice(1));
+      this.convert(this.data);
+      this.chartData;
+      var xs = this.chartData.map(x => x.slice(1));
       if (xs.length > 0)
         for (var i = 0; i < xs[0].length; i++) {
           if (xs[this.headers.indexOf(LABEL)]) {
@@ -107,9 +117,6 @@ export default {
       return this.headers.map((x, i) => {
         return { name: x, data: data[i] };
       });
-    },
-    converted: function() {
-      return _.zip.apply(_, this.data);
     },
     labels: function() {
       return this.labelsInput.split("\n");
