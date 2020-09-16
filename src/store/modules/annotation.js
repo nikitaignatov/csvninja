@@ -62,7 +62,6 @@ export default {
     state: () => ({
         range: { from: null, to: null },
         data: [],
-        zoom: { a: null, b: null },
 
         columns: [],
         //
@@ -88,8 +87,21 @@ export default {
         },
     },
     actions: {
-        convert: function ({ commit }, payload) {
-            commit('converted', _.zip.apply(_, payload))
+        convert: function ({ commit }, { payload, labels, headers }) {
+            var data = _.zip.apply(_, payload);
+            var xs = data.map(x => x.slice(1));
+            if (xs.length > 0) {
+                for (var i = 0; i < xs[0].length; i++) {
+                    if (xs[headers.indexOf(LABEL)]) {
+                        if (!xs[headers.indexOf(LABEL)][i]) {
+                            xs[headers.indexOf(LABEL)][i] = labels[0];
+                        }
+                    } else {
+                        xs.push([labels[0]]);
+                    }
+                }
+            }
+            commit('converted', xs)
         },
         select: function ({ commit }, payload) {
             commit('selected', payload)

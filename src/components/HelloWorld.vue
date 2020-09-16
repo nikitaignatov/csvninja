@@ -91,20 +91,12 @@ export default {
       }
     },
     data2: function() {
-      this.convert(this.data);
-      this.chartData;
-      var xs = this.chartData.map(x => x.slice(1));
-      if (xs.length > 0)
-        for (var i = 0; i < xs[0].length; i++) {
-          if (xs[this.headers.indexOf(LABEL)]) {
-            if (!xs[this.headers.indexOf(LABEL)][i]) {
-              xs[this.headers.indexOf(LABEL)][i] = this.labels[0];
-            }
-          } else {
-            xs.push([this.labels[0]]);
-          }
-        }
-      return xs;
+      this.convert({
+        payload: this.data,
+        labels: this.labelsInput.split("\n"),
+        headers: this.headers
+      });
+      return this.chartData;
     },
     series: function() {
       var data = this.data2;
@@ -118,7 +110,6 @@ export default {
   },
   data: function() {
     return {
-      zoom: { a: null, b: null },
       labelsInput: "unknown\nrest\nswing up\nswing down\nswitch hand",
       selectedLabel: 0
     };
