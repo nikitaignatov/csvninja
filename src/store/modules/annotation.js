@@ -90,12 +90,11 @@ export default {
         convert: function ({ commit }, { payload, labels, headers }) {
             var data = _.zip.apply(_, payload);
             var xs = data.map(x => x.slice(1));
-            if (xs.length > 0) {
+            var label = xs[headers.indexOf(LABEL)]
+            if (xs && xs.length > 0) {
                 for (var i = 0; i < xs[0].length; i++) {
-                    if (xs[headers.indexOf(LABEL)]) {
-                        if (!xs[headers.indexOf(LABEL)][i]) {
-                            xs[headers.indexOf(LABEL)][i] = labels[0];
-                        }
+                    if (label && !label[i]) {
+                        label[i] = labels[0];
                     } else {
                         xs.push([labels[0]]);
                     }
