@@ -20,19 +20,13 @@
     <button @click="annotateData">annotate</button>
     <div>
       <apexchart
+        ref="demoChart"
         :options="selection"
         height="300"
         :series="series.filter(x=>contains(x.name))"
       ></apexchart>
     </div>
-    <div v-for="s in series" :key="s.name">
-      <apexchart
-        :options="selection"
-        height="160"
-        v-if="contains(s.name)"
-        :series="[s]"
-      ></apexchart>
-    </div>
+
     <h2>Output</h2>
     <pre>{{output}}</pre>
   </div>
@@ -86,7 +80,7 @@ export default {
     }),
 
     selection: function() {
-      return this.options(this.select);
+      return this.options(this.select, this.zoom);
     },
     columnsInput: {
       get: function() {
@@ -124,6 +118,7 @@ export default {
   },
   data: function() {
     return {
+      zoom: { a: null, b: null },
       labelsInput: "unknown\nrest\nswing up\nswing down\nswitch hand",
       selectedLabel: 0
     };

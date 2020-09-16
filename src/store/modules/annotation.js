@@ -14,7 +14,7 @@ const options = {
         size: 0
     },
     chart: {
-        id: "vuechart-example.1",
+        id: "charID",
         group: "items",
         type: "line",
         toolbar: {
@@ -62,6 +62,7 @@ export default {
     state: () => ({
         range: { from: null, to: null },
         data: [],
+        zoom: { a: null, b: null },
 
         columns: [],
         //
@@ -142,6 +143,30 @@ export default {
                 selection: function (chartContext, { xaxis, yaxis }) {
                     if (!yaxis) return;
                     selection(xaxis)
+                },
+                zoomed: function (chartContext, { xaxis }) {
+                    if (!xaxis) return
+                    console.log('zoomed', xaxis)
+                    state.options = {
+                        ...state.options,
+                        xaxis: {
+                            ...state.options.xaxis,
+                            min: xaxis.min,
+                            max: xaxis.max
+                        }
+                    }
+                },
+                scrolled: function (chartContext, { xaxis }) {
+                    if (!xaxis) return
+                    console.log('scrolled', xaxis)
+                    state.options = {
+                        ...state.options,
+                        xaxis: {
+                            ...state.options.xaxis,
+                            min: xaxis.min,
+                            max: xaxis.max
+                        }
+                    }
                 }
             }
             return state.options
