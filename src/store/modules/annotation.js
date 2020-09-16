@@ -91,12 +91,14 @@ export default {
             var data = _.zip.apply(_, payload);
             var xs = data.map(x => x.slice(1));
             var label = xs[headers.indexOf(LABEL)]
-            if (xs && xs.length > 0) {
+            if (!label) {
+                label = [labels[0]]
+                xs.push(label);
+            }
+            if (xs.length > 0) {
                 for (var i = 0; i < xs[0].length; i++) {
-                    if (label && !label[i]) {
+                    if (!label[i]) {
                         label[i] = labels[0];
-                    } else {
-                        xs.push([labels[0]]);
                     }
                 }
             }
