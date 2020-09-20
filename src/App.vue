@@ -64,7 +64,7 @@
     </v-app-bar>
     <v-main>
       <v-container class="fill-height" fluid>
-        <v-row align="center" justify="center">
+        <v-row align="center" justify="center">            
           <router-view />
         </v-row>
       </v-container>
@@ -87,8 +87,12 @@ export default {
         "icon-alt": "mdi-chevron-down",
         model: true,
         children: [
-          { icon: "mdi-axis-arrow", text: "Accelerometer" },
+          { icon: "mdi-crosshairs-gps", text: "Gps" },
+          { icon: "mdi-signal-cellular-2", text: "RSSI" },
           { icon: "mdi-rotate-orbit", text: "Gyro" },
+          { icon: "mdi-axis-arrow", text: "Accelerometer" },
+          { icon: "mdi-speedometer", text: "Speedometer" },
+          { icon: "mdi-lightbulb-on-outline", text: "Light" },
           { icon: "mdi-thermometer-plus", text: "Temperature" },
           { icon: "mdi-gauge", text: "Pressure" }
         ]

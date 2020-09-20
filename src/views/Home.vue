@@ -1,6 +1,7 @@
 <template>
   <div class="home">
-    <h1 class="text-h2">Time Series Annotation</h1>
+      
+    <h1 class="text-h3">Time Series Annotation - {{ $route.params.sample }} Data Example</h1>
     <HelloWorld />
   </div>
 </template>

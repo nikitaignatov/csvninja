@@ -4,7 +4,7 @@
       label="Csv Data"
       rows="8"
       cols="120"
-      :value="input"
+      :value="input||sample"
       @change="x => read(x)"
       :placeholder="example"
     ></v-textarea>
@@ -37,9 +37,17 @@
 
 <script>
 import { mapActions, mapGetters, mapState } from "vuex";
+import { ACCELEROMETER } from "@/samples";
 
 import _ from "lodash";
 const LABEL = "label";
+
+const samples = {
+  accelerometer: ACCELEROMETER,
+  rssi: ACCELEROMETER,
+  gyro: ACCELEROMETER,
+  gps: ACCELEROMETER
+};
 
 export default {
   name: "Annotations",
@@ -81,7 +89,9 @@ export default {
       columns: "columns",
       chartData: "data"
     }),
-
+    sample: function() {
+      return samples[this.$route.params.sample];
+    },
     selection: function() {
       return this.options(this.select, this.zoom);
     },

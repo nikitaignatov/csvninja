@@ -5,15 +5,34 @@ import Home from "../views/Home.vue";
 Vue.use(VueRouter);
 
 const routes = [
-  {
-    path: "/",
-    name: "Home",
-    component: Home
-  }
+    {
+        path: "/",
+        name: "Home",
+        component: Home
+    },
+    {
+        path: "/annotation/",
+        name: "Annotation",
+        component: Home,
+        children: [
+            {
+                path: "times-series",
+                name: "Time Series",
+                component: Home,
+                children: [
+                    {
+                        path: ":sample",
+                        name: "Sample",
+                        component: Home
+                    }
+                ]
+            }
+        ]
+    }
 ];
 
 const router = new VueRouter({
-  routes
+    routes
 });
 
 export default router;
