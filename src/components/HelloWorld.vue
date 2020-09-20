@@ -4,18 +4,22 @@
       :value="input"
       rows="5"
       cols="80"
-      @change="x=>read(x.target.value)"
+      @change="x => read(x.target.value)"
       :placeholder="example"
     ></textarea>
     <textarea v-model="labelsInput" rows="5" cols="80"></textarea>
     <br />
     <select v-model="columnsInput" multiple>
       <option disabled value="0">Please select one</option>
-      <option v-for="column in headers" :key="column" v-bind:value="column">{{column}}</option>
+      <option v-for="column in headers" :key="column" v-bind:value="column">{{
+        column
+      }}</option>
     </select>
     <select v-model="selectedLabel">
       <option disabled value="0">Please select one</option>
-      <option v-for="label in labels" :key="label" v-bind:value="label">{{label}}</option>
+      <option v-for="label in labels" :key="label" v-bind:value="label">{{
+        label
+      }}</option>
     </select>
     <button @click="annotateData">annotate</button>
     <div>
@@ -23,12 +27,12 @@
         ref="demoChart"
         :options="selection"
         height="300"
-        :series="series.filter(x=>contains(x.name))"
+        :series="series.filter(x => contains(x.name))"
       ></apexchart>
     </div>
 
     <h2>Output</h2>
-    <pre>{{output}}</pre>
+    <pre>{{ output }}</pre>
   </div>
 </template>
 
@@ -115,4 +119,4 @@ export default {
     };
   }
 };
-</script> 
+</script>
