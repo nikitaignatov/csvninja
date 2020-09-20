@@ -1,27 +1,18 @@
 <template>
   <div class="hello">
-    <textarea
+    <v-textarea
+      label="Csv Data"
+      rows="8"
+      cols="120"
       :value="input"
-      rows="5"
-      cols="80"
-      @change="x => read(x.target.value)"
+      @change="x => read(x)"
       :placeholder="example"
-    ></textarea>
-    <textarea v-model="labelsInput" rows="5" cols="80"></textarea>
+    ></v-textarea>
+    <v-textarea v-model="labelsInput" label="labels" rows="5" cols="80"></v-textarea>
     <br />
-    <select v-model="columnsInput" multiple>
-      <option disabled value="0">Please select one</option>
-      <option v-for="column in headers" :key="column" v-bind:value="column">{{
-        column
-      }}</option>
-    </select>
-    <select v-model="selectedLabel">
-      <option disabled value="0">Please select one</option>
-      <option v-for="label in labels" :key="label" v-bind:value="label">{{
-        label
-      }}</option>
-    </select>
-    <button @click="annotateData">annotate</button>
+
+    <v-combobox v-model="columnsInput" :items="headers" multiple outlined label="Data Columns"></v-combobox>
+
     <div>
       <apexchart
         ref="demoChart"
@@ -31,8 +22,16 @@
       ></apexchart>
     </div>
 
-    <h2>Output</h2>
-    <pre>{{ output }}</pre>
+    <v-combobox v-model="selectedLabel" :items="labels" outlined label="Active Label"></v-combobox>
+    <v-btn large color="primary" @click="annotateData">Annotate</v-btn>
+    <h2 class="text-h2">Output</h2>
+    <v-textarea
+      label="Csv Data"
+      rows="8"
+      cols="120"
+      :value="output"
+      placeholder="Annotations are not defined"
+    ></v-textarea>
   </div>
 </template>
 

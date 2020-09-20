@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <h1>Csv Ninja</h1>
+    <h1 class="text-h2">Time Series Annotation</h1>
     <HelloWorld />
   </div>
 </template>
