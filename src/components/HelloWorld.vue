@@ -5,7 +5,7 @@
       rows="8"
       cols="120"
       :value="input||sample"
-      @change="x => read(x)"
+      @change="read"
       :placeholder="example"
     ></v-textarea>
     <v-textarea v-model="labelsInput" label="labels" rows="5" cols="80"></v-textarea>

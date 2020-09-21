@@ -56,6 +56,21 @@ const options = {
     type: "numeric"
   }
 };
+
+const scrollAndZoomHandler = function(state) {
+    return function(chartContext, { xaxis }) {
+        if (xaxis) 
+            state.options = {
+                ...state.options,
+                xaxis: {
+                    ...state.options.xaxis,
+                    min: xaxis.min,
+                    max: xaxis.max
+                }
+            };
+    }
+}
+
 export default {
   namespaced: true,
   state: () => ({
@@ -124,13 +139,14 @@ export default {
       var labels = payload.data2[labelIndex];
       var start = 0;
       for (var i = 0; i < labels.length; i++) {
+        const fillColor =state.colors[state.labels.indexOf(labels[i - 1])]
         if (i > 0) {
           var same = labels[i] === labels[i - 1];
           if (!same) {
             m.push({
               x: start,
               x2: i,
-              fillColor: state.colors[state.labels.indexOf(labels[i - 1])],
+              fillColor: fillColor,
               label: {
                 text: labels[i - 1]
               }
@@ -140,7 +156,7 @@ export default {
             m.push({
               x: start,
               x2: i + 1,
-              fillColor: state.colors[state.labels.indexOf(labels[i - 1])],
+              fillColor: fillColor,
               label: {
                 text: labels[i]
               }
@@ -158,30 +174,8 @@ export default {
           if (!yaxis) return;
           selection(xaxis);
         },
-        zoomed: function(chartContext, { xaxis }) {
-          if (!xaxis) return;
-          console.log("zoomed", xaxis);
-          state.options = {
-            ...state.options,
-            xaxis: {
-              ...state.options.xaxis,
-              min: xaxis.min,
-              max: xaxis.max
-            }
-          };
-        },
-        scrolled: function(chartContext, { xaxis }) {
-          if (!xaxis) return;
-          console.log("scrolled", xaxis);
-          state.options = {
-            ...state.options,
-            xaxis: {
-              ...state.options.xaxis,
-              min: xaxis.min,
-              max: xaxis.max
-            }
-          };
-        }
+        zoomed: scrollAndZoomHandler(state),
+        scrolled: scrollAndZoomHandler(state)
       };
       return state.options;
     }
