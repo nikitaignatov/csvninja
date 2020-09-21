@@ -105,7 +105,7 @@ export default {
   actions: {
     convert: function({ commit }, { payload, labels, headers }) {
       var data = _.zip.apply(_, payload);
-      var xs = data.map(x => x.slice(1));
+      var xs = data.map(x => x);
       var label = xs[headers.indexOf(LABEL)];
       if (!label) {
         label = [labels[0]];
