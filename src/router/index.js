@@ -1,28 +1,28 @@
-import Vue from "vue";
-import VueRouter from "vue-router";
-import Home from "../views/Home.vue";
+import Vue from 'vue';
+import VueRouter from 'vue-router';
+import Home from '../views/Home.vue';
 
 Vue.use(VueRouter);
 
 const routes = [
     {
-        path: "/",
-        name: "Home",
+        path: '/',
+        name: 'Home',
         component: Home
     },
     {
-        path: "/annotation/",
-        name: "Annotation",
+        path: '/annotation/',
+        name: 'Annotation',
         component: Home,
         children: [
             {
-                path: "times-series",
-                name: "Time Series",
+                path: 'times-series',
+                name: 'Time Series',
                 component: Home,
                 children: [
                     {
-                        path: ":sample",
-                        name: "Sample",
+                        path: ':sample',
+                        name: 'Sample',
                         component: Home
                     }
                 ]
