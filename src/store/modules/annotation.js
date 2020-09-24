@@ -1,6 +1,7 @@
 import _ from 'lodash';
+import * as utils from '@/store/utils'
+import {LABEL} from '@/store/utils'
 
-const LABEL = 'label';
 const options = {
     annotations: { xaxis: [] },
     dataLabels: {
@@ -57,20 +58,6 @@ const options = {
     }
 };
 
-const scrollAndZoomHandler = function(state) {
-    return function(chartContext, { xaxis }) {
-        if (xaxis)
-            state.options = {
-                ...state.options,
-                xaxis: {
-                    ...state.options.xaxis,
-                    min: xaxis.min,
-                    max: xaxis.max
-                }
-            };
-    };
-};
-
 export default {
     namespaced: true,
     state: () => ({
@@ -85,25 +72,25 @@ export default {
         options
     }),
     mutations: {
-        annotated: function(state, payload) {
+        annotated: function (state, payload) {
             state.options = {
                 ...state.options,
                 annotations: { xaxis: payload }
             };
         },
-        converted: function(state, payload) {
+        converted: function (state, payload) {
             state.data = payload;
         },
-        selected: function(state, payload) {
+        selected: function (state, payload) {
             state.range.from = Math.round(payload.min);
             state.range.to = Math.round(payload.max);
         },
-        selectColumns: function(state, payload) {
+        selectColumns: function (state, payload) {
             state.columns = payload;
         }
     },
     actions: {
-        convert: function({ commit }, { payload, labels, headers }) {
+        convert: function ({ commit }, { payload, labels, headers }) {
             var data = _.zip.apply(_, payload);
             var xs = data.map(x => x);
             var label = xs[headers.indexOf(LABEL)];
@@ -120,18 +107,14 @@ export default {
             }
             commit('converted', xs);
         },
-        select: function({ commit }, payload) {
+        select: function ({ commit }, payload) {
             commit('selected', payload);
         },
-        selectColumns: function({ commit }, payload) {
+        selectColumns: function ({ commit }, payload) {
             commit('selectColumns', payload);
         },
-        annotate: function({ state }, payload) {
-            for (var i = state.range.from; i < state.range.to; i++) {
-                state.data[state.headers.indexOf(LABEL)][i] = payload;
-            }
-        },
-        renderAnnotations: function({ state, commit }, payload) {
+        annotate: utils.annotate,
+        renderAnnotations: function ({ state, commit }, payload) {
             var m = state.options.annotations.xaxis;
             state.labels = payload.labels;
             m = [];
@@ -171,12 +154,12 @@ export default {
     getters: {
         getOptions: state => selection => {
             state.options.chart.events = {
-                selection: function(chartContext, { xaxis, yaxis }) {
+                selection: function (chartContext, { xaxis, yaxis }) {
                     if (!yaxis) return;
                     selection(xaxis);
                 },
-                zoomed: scrollAndZoomHandler(state),
-                scrolled: scrollAndZoomHandler(state)
+                zoomed: utils.scrollAndZoomHandler(state),
+                scrolled: utils.scrollAndZoomHandler(state)
             };
             return state.options;
         }
