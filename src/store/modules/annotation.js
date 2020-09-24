@@ -1,5 +1,4 @@
-import _ from 'lodash';
-import * as utils from '@/store/utils';
+import { columnsToRows } from '@/store/utils';
 
 const options = {
     annotations: { xaxis: [] },
@@ -71,11 +70,6 @@ export const labelIndex = function(headers, LABEL) {
     return headers.indexOf(LABEL);
 };
 
-/** Transposes the columns into rows */
-export const transpose = function(payload) {
-    return _.zip.apply(_, payload);
-};
-
 /** Adds a separate column for the labels and populates them with the default label if a label is missing. */
 export const addLabelColumn = function(xs, index, defaultLabel) {
     const label = xs[index] || (xs[xs.length] = [LABEL]);
@@ -92,9 +86,25 @@ export const addLabelColumn = function(xs, index, defaultLabel) {
 /** Converts csv data into chart series compatible format */
 export const convert = function({ commit }, { payload, labels, headers }) {
     var index = labelIndex(headers);
-    var xs = transpose(payload);
+    var xs = columnsToRows(payload);
     xs = addLabelColumn(xs, index, labels[0]);
     commit('converted', xs);
+};
+
+/** Sets the new window for the data based on the zoom or scroll event */
+export const scrollAndZoomHandler = function(state) {
+    return function(chartContext, { xaxis }) {
+        if (xaxis && state && state.options) {
+            state.options = {
+                ...state.options,
+                xaxis: {
+                    ...state.options.xaxis,
+                    min: xaxis.min,
+                    max: xaxis.max
+                }
+            };
+        }
+    };
 };
 
 export default {
@@ -181,8 +191,8 @@ export default {
                     if (!yaxis) return;
                     selection(xaxis);
                 },
-                zoomed: utils.scrollAndZoomHandler(state),
-                scrolled: utils.scrollAndZoomHandler(state)
+                zoomed: scrollAndZoomHandler(state),
+                scrolled: scrollAndZoomHandler(state)
             };
             return state.options;
         }

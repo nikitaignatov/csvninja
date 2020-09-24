@@ -1,14 +1,11 @@
-export const scrollAndZoomHandler = function(state) {
-    return function(chartContext, { xaxis }) {
-        if (xaxis && state && state.options) {
-            state.options = {
-                ...state.options,
-                xaxis: {
-                    ...state.options.xaxis,
-                    min: xaxis.min,
-                    max: xaxis.max
-                }
-            };
-        }
-    };
+import _ from 'lodash';
+
+/** Transposes the columns into rows */
+export const columnsToRows = function(payload) {
+    return _.zip.apply(_, payload);
+};
+
+/** Transposes the rows into columns */
+export const rowsToColumns = function(payload) {
+    return _.unzip.apply(payload);
 };
