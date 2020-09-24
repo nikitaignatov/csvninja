@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import * as utils from '@/store/utils'
+import * as utils from '@/store/utils';
 
 const options = {
     annotations: { xaxis: [] },
@@ -58,32 +58,32 @@ const options = {
 };
 
 export const LABEL = 'label';
-export const annotate = function ({ state }, payload) {
+export const annotate = function({ state }, payload) {
     for (var i = state.range.from; i <= state.range.to; i++) {
         state.data[state.headers.indexOf(LABEL)][i] = payload;
     }
 };
-export const labelIndex = function (headers, LABEL) {
-    return headers.indexOf(LABEL)
+export const labelIndex = function(headers, LABEL) {
+    return headers.indexOf(LABEL);
 };
-export const transpose = function (payload, index, defaultLabel) {
-    const xs = _.zip.apply(_, payload);
-    const label = xs[index];
-    if (!label) {
-        xs.push([defaultLabel]);
-    }
-    return xs
+export const transpose = function(payload) {
+    return _.zip.apply(_, payload);
 };
-export const convert = function ({ commit }, { payload, labels, headers }) {
-    var index = labelIndex(headers)
-    var xs = transpose(payload, index, LABEL);
+export const addLabelColumn = function(xs, index, defaultLabel) {
+    const label = xs[index] || (xs[xs.length] = [LABEL]);
     if (xs.length > 0) {
         for (var i = 0; i < xs[0].length; i++) {
             if (!label[i]) {
-                label[i] = labels[0];
+                label[i] = defaultLabel;
             }
         }
     }
+    return xs;
+};
+export const convert = function({ commit }, { payload, labels, headers }) {
+    var index = labelIndex(headers);
+    var xs = transpose(payload);
+    xs = addLabelColumn(xs, index, labels[0]);
     commit('converted', xs);
 };
 export default {
@@ -100,33 +100,33 @@ export default {
         options
     }),
     mutations: {
-        annotated: function (state, payload) {
+        annotated: function(state, payload) {
             state.options = {
                 ...state.options,
                 annotations: { xaxis: payload }
             };
         },
-        converted: function (state, payload) {
+        converted: function(state, payload) {
             state.data = payload;
         },
-        selected: function (state, payload) {
+        selected: function(state, payload) {
             state.range.from = Math.round(payload.min);
             state.range.to = Math.round(payload.max);
         },
-        selectColumns: function (state, payload) {
+        selectColumns: function(state, payload) {
             state.columns = payload;
         }
     },
     actions: {
         convert: convert,
-        select: function ({ commit }, payload) {
+        select: function({ commit }, payload) {
             commit('selected', payload);
         },
-        selectColumns: function ({ commit }, payload) {
+        selectColumns: function({ commit }, payload) {
             commit('selectColumns', payload);
         },
         annotate: annotate,
-        renderAnnotations: function ({ state, commit }, payload) {
+        renderAnnotations: function({ state, commit }, payload) {
             var m = state.options.annotations.xaxis;
             state.labels = payload.labels;
             m = [];
@@ -166,7 +166,7 @@ export default {
     getters: {
         getOptions: state => selection => {
             state.options.chart.events = {
-                selection: function (chartContext, { xaxis, yaxis }) {
+                selection: function(chartContext, { xaxis, yaxis }) {
                     if (!yaxis) return;
                     selection(xaxis);
                 },

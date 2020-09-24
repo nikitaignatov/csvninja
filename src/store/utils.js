@@ -1,5 +1,5 @@
-export const scrollAndZoomHandler = function (state) {
-    return function (chartContext, { xaxis }) {
+export const scrollAndZoomHandler = function(state) {
+    return function(chartContext, { xaxis }) {
         if (xaxis && state && state.options) {
             state.options = {
                 ...state.options,
