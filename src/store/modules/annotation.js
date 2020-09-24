@@ -58,20 +58,28 @@ const options = {
 };
 
 export const LABEL = 'label';
+
+/** Annotates a data range with a given label value */
 export const annotate = function({ state }, payload) {
     for (var i = state.range.from; i <= state.range.to; i++) {
         state.data[state.headers.indexOf(LABEL)][i] = payload;
     }
 };
+
+/** Index of a label column */
 export const labelIndex = function(headers, LABEL) {
     return headers.indexOf(LABEL);
 };
+
+/** Transposes the columns into rows */
 export const transpose = function(payload) {
     return _.zip.apply(_, payload);
 };
+
+/** Adds a separate column for the labels and populates them with the default label if a label is missing. */
 export const addLabelColumn = function(xs, index, defaultLabel) {
     const label = xs[index] || (xs[xs.length] = [LABEL]);
-    if (xs.length > 0) {
+    if (xs.length > 1) {
         for (var i = 0; i < xs[0].length; i++) {
             if (!label[i]) {
                 label[i] = defaultLabel;
@@ -80,12 +88,15 @@ export const addLabelColumn = function(xs, index, defaultLabel) {
     }
     return xs;
 };
+
+/** Converts csv data into chart series compatible format */
 export const convert = function({ commit }, { payload, labels, headers }) {
     var index = labelIndex(headers);
     var xs = transpose(payload);
     xs = addLabelColumn(xs, index, labels[0]);
     commit('converted', xs);
 };
+
 export default {
     namespaced: true,
     state: () => ({
