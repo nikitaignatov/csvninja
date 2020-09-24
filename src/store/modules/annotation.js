@@ -63,6 +63,29 @@ export const annotate = function ({ state }, payload) {
         state.data[state.headers.indexOf(LABEL)][i] = payload;
     }
 };
+export const labelIndex = function (headers, LABEL) {
+    return headers.indexOf(LABEL)
+};
+export const transpose = function (payload, index, defaultLabel) {
+    const xs = _.zip.apply(_, payload);
+    const label = xs[index];
+    if (!label) {
+        xs.push([defaultLabel]);
+    }
+    return xs
+};
+export const convert = function ({ commit }, { payload, labels, headers }) {
+    var index = labelIndex(headers)
+    var xs = transpose(payload, index, LABEL);
+    if (xs.length > 0) {
+        for (var i = 0; i < xs[0].length; i++) {
+            if (!label[i]) {
+                label[i] = labels[0];
+            }
+        }
+    }
+    commit('converted', xs);
+};
 export default {
     namespaced: true,
     state: () => ({
@@ -95,23 +118,7 @@ export default {
         }
     },
     actions: {
-        convert: function ({ commit }, { payload, labels, headers }) {
-            var data = _.zip.apply(_, payload);
-            var xs = data.map(x => x);
-            var label = xs[headers.indexOf(LABEL)];
-            if (!label) {
-                label = [labels[0]];
-                xs.push(label);
-            }
-            if (xs.length > 0) {
-                for (var i = 0; i < xs[0].length; i++) {
-                    if (!label[i]) {
-                        label[i] = labels[0];
-                    }
-                }
-            }
-            commit('converted', xs);
-        },
+        convert: convert,
         select: function ({ commit }, payload) {
             commit('selected', payload);
         },
