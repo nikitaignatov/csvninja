@@ -1,6 +1,5 @@
 import _ from 'lodash';
 import * as utils from '@/store/utils'
-import {LABEL} from '@/store/utils'
 
 const options = {
     annotations: { xaxis: [] },
@@ -58,6 +57,12 @@ const options = {
     }
 };
 
+export const LABEL = 'label';
+export const annotate = function ({ state }, payload) {
+    for (var i = state.range.from; i <= state.range.to; i++) {
+        state.data[state.headers.indexOf(LABEL)][i] = payload;
+    }
+};
 export default {
     namespaced: true,
     state: () => ({
@@ -113,7 +118,7 @@ export default {
         selectColumns: function ({ commit }, payload) {
             commit('selectColumns', payload);
         },
-        annotate: utils.annotate,
+        annotate: annotate,
         renderAnnotations: function ({ state, commit }, payload) {
             var m = state.options.annotations.xaxis;
             state.labels = payload.labels;

@@ -1,4 +1,3 @@
-export const LABEL = 'label';
 export const scrollAndZoomHandler = function (state) {
     return function (chartContext, { xaxis }) {
         if (xaxis && state && state.options) {
@@ -12,10 +11,4 @@ export const scrollAndZoomHandler = function (state) {
             };
         }
     };
-};
-
-export const annotate = function ({ state }, payload) {
-    for (var i = state.range.from; i <= state.range.to; i++) {
-        state.data[state.headers.indexOf(LABEL)][i] = payload;
-    }
 };

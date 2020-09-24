@@ -1,5 +1,4 @@
 import * as utils from '@/store/utils';
-import { LABEL } from '@/store/utils';
 
 describe('scrollAndZoomHandler', () => {
     it('should handle invalid state', () => {
@@ -34,16 +33,5 @@ describe('scrollAndZoomHandler', () => {
         const xaxis = { min, max }
         utils.scrollAndZoomHandler(state)(null, { xaxis })
         expect(state).toStrictEqual({ options: { xaxis: result } });
-    });
-});
-
-describe('annotate', () => {
-    it('should annotate the data range with the payload', () => {
-        const unknown = "unknown"
-        const data = [[1, 2, 3], [unknown, unknown, unknown]]
-        const context = { state: { headers: ['x', LABEL], data: data, range: { from: 1, to: 2 } } }
-        const payload = "some-label"
-        utils.annotate(context, payload)
-        expect(context.state.data).toStrictEqual([[1, 2, 3], [unknown, payload, payload]]);
     });
 });
