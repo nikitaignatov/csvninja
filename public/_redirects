@@ -8,3 +8,6 @@ http://www.csvninja.com/*   https://csv.ninja/:splat    301!
 https://www.csv.ninja/*      https://csv.ninja/:splat    301!
 https://csvninja.com/*       https://csv.ninja/:splat    301!
 https://www.csvninja.com/*   https://csv.ninja/:splat    301!
+
+# Rewrite rules
+/data-labeling              /    200
