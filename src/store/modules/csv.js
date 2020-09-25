@@ -72,15 +72,15 @@ export default {
                 state.inputWithHeaders
             );
             commit('input', payload);
-            commit('data', records.data);
             commit('headers', records.headers);
             if (records.data) {
+                commit('data', records.data);
                 commit('output', records.data);
             }
         },
         write: function({ commit }, payload) {
-            commit('data', payload);
             if (payload) {
+                commit('data', payload);
                 commit('output', payload);
             }
         }

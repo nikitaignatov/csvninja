@@ -66,7 +66,7 @@ export const annotate = function({ state }, payload) {
 };
 
 /** Index of a label column */
-export const labelIndex = function(headers, LABEL) {
+export const labelIndex = function(headers, LABEL = LABEL) {
     return headers.indexOf(LABEL);
 };
 
@@ -105,6 +105,33 @@ export const scrollAndZoomHandler = function(state) {
             };
         }
     };
+};
+
+/** Defines the annotation objects that will be rendered for the selected ranges  */
+export const renderAnnotations = function({ state, commit }, payload) {
+    state.labels = payload.labels;
+    var xs = [];
+    var column = labelIndex(payload.headers);
+    var labels = payload.data2[column];
+    var start = 0;
+    const create = (x, x2, color, label) => {
+        const fillColor = state.colors[color];
+        label = { text: labels[label] };
+        return { x, x2, fillColor, label };
+    };
+    for (var i = 0; i < labels.length; i++) {
+        const color = state.labels.indexOf(labels[i - 1]);
+        if (i > 0) {
+            var same = labels[i] === labels[i - 1];
+            if (!same) {
+                xs.push(create(start, i, color, i - 1));
+                start = i;
+            } else if (i === labels.length - 1) {
+                xs.push(create(start, i + 1, color, i));
+            }
+        }
+    }
+    commit('annotated', xs);
 };
 
 export default {
@@ -147,42 +174,7 @@ export default {
             commit('selectColumns', payload);
         },
         annotate: annotate,
-        renderAnnotations: function({ state, commit }, payload) {
-            var m = state.options.annotations.xaxis;
-            state.labels = payload.labels;
-            m = [];
-            var labelIndex = payload.headers.indexOf(LABEL);
-            var labels = payload.data2[labelIndex];
-            var start = 0;
-            for (var i = 0; i < labels.length; i++) {
-                const fillColor =
-                    state.colors[state.labels.indexOf(labels[i - 1])];
-                if (i > 0) {
-                    var same = labels[i] === labels[i - 1];
-                    if (!same) {
-                        m.push({
-                            x: start,
-                            x2: i,
-                            fillColor: fillColor,
-                            label: {
-                                text: labels[i - 1]
-                            }
-                        });
-                        start = i;
-                    } else if (i === labels.length - 1) {
-                        m.push({
-                            x: start,
-                            x2: i + 1,
-                            fillColor: fillColor,
-                            label: {
-                                text: labels[i]
-                            }
-                        });
-                    }
-                }
-            }
-            commit('annotated', m);
-        }
+        renderAnnotations: renderAnnotations
     },
     getters: {
         getOptions: state => selection => {
