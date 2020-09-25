@@ -1,20 +1,27 @@
 <template>
     <div class="hello">
-        <v-textarea
-            label="Csv Data"
-            rows="8"
-            cols="120"
-            :value="input || sample"
-            @change="read"
-            :placeholder="example"
-        ></v-textarea>
-        <v-textarea
-            v-model="labelsInput"
-            label="labels"
-            rows="5"
-            cols="80"
-        ></v-textarea>
-        <br />
+        <v-container>
+            <v-row>
+                <v-col cols="6">
+                    <v-textarea
+                        label="Csv Data"
+                        rows="5"
+                        cols="120"
+                        :value="input || sample"
+                        @change="read"
+                        :placeholder="example"
+                    ></v-textarea>
+                </v-col>
+                <v-col cols="6">
+                    <v-textarea
+                        v-model="labelsInput"
+                        label="labels"
+                        rows="5"
+                        cols="80"
+                    ></v-textarea>
+                </v-col>
+            </v-row>
+        </v-container>
 
         <v-combobox
             v-model="columnsInput"

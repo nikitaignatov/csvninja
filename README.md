@@ -1,5 +1,11 @@
 # Csv Ninja
 
+[Csv Ninja](https://csv.ninja) is a tool for annotating sensor and time-series data.
+
+
+## Features
+- 
+
 ## Project setup
 ```
 npm install
