@@ -2,7 +2,8 @@ import {
     LABEL,
     annotate,
     addLabelColumn,
-    scrollAndZoomHandler
+    scrollAndZoomHandler,
+    labelIndex
 } from '@/store/modules/annotation';
 import { columnsToRows } from '@/store/utils';
 
@@ -136,6 +137,39 @@ describe('scrollAndZoomHandler', () => {
             const xaxis = { min, max };
             scrollAndZoomHandler(state)(null, { xaxis });
             expect(state).toStrictEqual({ options: { xaxis: result } });
+        }
+    );
+});
+
+
+describe('labelIndex', () => {
+    const invalid = -1;
+    it.each`
+        input                   | expected
+        ${{}}                   | ${invalid}
+        ${[]}                   | ${invalid}
+        ${[20]}                 | ${invalid}
+        ${['test']}             | ${invalid}
+        ${['test', 'label']}    | ${1}
+    `(
+        'labelIndex should return $expected when called with $input and not providing the label name',
+        ({ input, expected }) => {
+            const result = labelIndex(input);
+            expect(expected).toStrictEqual(result);
+        }
+    );
+
+    it.each`
+        input                   | label    | expected
+        ${[20]}                 | ${'lbl'} | ${invalid}
+        ${['test']}             | ${'lbl'} | ${invalid}
+        ${['lbl']}              | ${'lbl'} | ${0}
+        ${['test', 'lbl']}      | ${'lbl'} | ${1}
+    `(
+        'labelIndex should return $expected when called with $input and not providing the label name',
+        ({ input, label, expected }) => {
+            const result = labelIndex(input, label);
+            expect(expected).toStrictEqual(result);
         }
     );
 });
