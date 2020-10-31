@@ -60,17 +60,10 @@
 
 <script>
 import { mapActions, mapGetters, mapState } from 'vuex';
-import { ACCELEROMETER } from '@/samples';
+import * as samples from '@/samples';
 
 import _ from 'lodash';
 const LABEL = 'label';
-
-const samples = {
-    accelerometer: ACCELEROMETER,
-    rssi: ACCELEROMETER,
-    gyro: ACCELEROMETER,
-    gps: ACCELEROMETER
-};
 
 export default {
     name: 'Annotations',

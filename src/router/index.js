@@ -3,6 +3,8 @@ import VueRouter from 'vue-router';
 import Home from '../views/Home.vue';
 
 Vue.use(VueRouter);
+const TimeSeries = { template: '<div>Test</div>' };
+const TimeSeriesSample = { template: '<div>Test</div>' };
 
 const routes = [
     {
@@ -11,19 +13,19 @@ const routes = [
         component: Home
     },
     {
-        path: '/annotation/',
+        path: '/annotation',
         name: 'Annotation',
         component: Home,
         children: [
             {
-                path: 'times-series',
+                path: 'time-series',
                 name: 'Time Series',
-                component: Home,
+                component: TimeSeries,
                 children: [
                     {
                         path: ':sample',
                         name: 'Sample',
-                        component: Home
+                        component: TimeSeriesSample
                     }
                 ]
             }
@@ -32,6 +34,7 @@ const routes = [
 ];
 
 const router = new VueRouter({
+    mode: 'history',
     routes
 });
 

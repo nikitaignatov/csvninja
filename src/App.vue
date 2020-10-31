@@ -40,6 +40,7 @@
                         <v-list-item
                             v-for="(child, i) in item.children"
                             :key="i"
+                            :to="child.to"
                             link
                         >
                             <v-list-item-action v-if="child.icon">
@@ -52,7 +53,7 @@
                             </v-list-item-content>
                         </v-list-item>
                     </v-list-group>
-                    <v-list-item v-else :key="item.text" link>
+                    <v-list-item v-else :key="item.text" :to="item.link" link>
                         <v-list-item-action>
                             <v-icon>{{ item.icon }}</v-icon>
                         </v-list-item-action>
@@ -116,14 +117,55 @@ export default {
                 'icon-alt': 'mdi-chevron-down',
                 model: true,
                 children: [
-                    { icon: 'mdi-crosshairs-gps', text: 'Gps' },
-                    { icon: 'mdi-signal-cellular-2', text: 'RSSI' },
-                    { icon: 'mdi-rotate-orbit', text: 'Gyro' },
-                    { icon: 'mdi-axis-arrow', text: 'Accelerometer' },
-                    { icon: 'mdi-speedometer', text: 'Speedometer' },
-                    { icon: 'mdi-lightbulb-on-outline', text: 'Light' },
-                    { icon: 'mdi-thermometer-plus', text: 'Temperature' },
-                    { icon: 'mdi-gauge', text: 'Pressure' }
+                    {
+                        icon: 'mdi-crosshairs-gps',
+                        text: 'Gps',
+                        to: { name: 'Sample', params: { sample: 'gps' } }
+                    },
+                    {
+                        icon: 'mdi-signal-cellular-2',
+                        text: 'RSSI',
+                        to: { name: 'Sample', params: { sample: 'rssi' } }
+                    },
+                    {
+                        icon: 'mdi-rotate-orbit',
+                        text: 'Gyro',
+                        to: { name: 'Sample', params: { sample: 'gyro' } }
+                    },
+                    {
+                        icon: 'mdi-axis-arrow',
+                        text: 'Accelerometer',
+                        to: {
+                            name: 'Sample',
+                            params: { sample: 'accelerometer' }
+                        }
+                    },
+                    {
+                        icon: 'mdi-speedometer',
+                        text: 'Speedometer',
+                        to: {
+                            name: 'Sample',
+                            params: { sample: 'speedometer' }
+                        }
+                    },
+                    {
+                        icon: 'mdi-lightbulb-on-outline',
+                        text: 'Light',
+                        to: { name: 'Sample', params: { sample: 'light' } }
+                    },
+                    {
+                        icon: 'mdi-thermometer-plus',
+                        text: 'Temperature',
+                        to: {
+                            name: 'Sample',
+                            params: { sample: 'temperature' }
+                        }
+                    },
+                    {
+                        icon: 'mdi-gauge',
+                        text: 'Pressure',
+                        to: { name: 'Sample', params: { sample: 'pressure' } }
+                    }
                 ]
             }
         ]
