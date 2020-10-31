@@ -141,16 +141,15 @@ describe('scrollAndZoomHandler', () => {
     );
 });
 
-
 describe('labelIndex', () => {
     const invalid = -1;
     it.each`
-        input                   | expected
-        ${{}}                   | ${invalid}
-        ${[]}                   | ${invalid}
-        ${[20]}                 | ${invalid}
-        ${['test']}             | ${invalid}
-        ${['test', 'label']}    | ${1}
+        input                | expected
+        ${{}}                | ${invalid}
+        ${[]}                | ${invalid}
+        ${[20]}              | ${invalid}
+        ${['test']}          | ${invalid}
+        ${['test', 'label']} | ${1}
     `(
         'labelIndex should return $expected when called with $input and not providing the label name',
         ({ input, expected }) => {
@@ -160,11 +159,11 @@ describe('labelIndex', () => {
     );
 
     it.each`
-        input                   | label    | expected
-        ${[20]}                 | ${'lbl'} | ${invalid}
-        ${['test']}             | ${'lbl'} | ${invalid}
-        ${['lbl']}              | ${'lbl'} | ${0}
-        ${['test', 'lbl']}      | ${'lbl'} | ${1}
+        input              | label    | expected
+        ${[20]}            | ${'lbl'} | ${invalid}
+        ${['test']}        | ${'lbl'} | ${invalid}
+        ${['lbl']}         | ${'lbl'} | ${0}
+        ${['test', 'lbl']} | ${'lbl'} | ${1}
     `(
         'labelIndex should return $expected when called with $input and not providing the label name',
         ({ input, label, expected }) => {
