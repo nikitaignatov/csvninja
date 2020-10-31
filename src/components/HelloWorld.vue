@@ -106,7 +106,7 @@ export default {
             chartData: 'data'
         }),
         sample: function() {
-            return samples[this.$route.params.sample];
+            return samples[(this.$route.params.sample || '').toLowerCase()];
         },
         selection: function() {
             return this.options(this.select, this.zoom);
