@@ -68,6 +68,8 @@ export const annotate = function({ state }, payload) {
 /** Index of a label column */
 export const labelIndex = function (headers, label = LABEL) {
     if (Array.isArray(headers))
+        return headers.indexOf(label);
+    else return -1
 };
 
 /** Adds a separate column for the labels and populates them with the default label if a label is missing. */
