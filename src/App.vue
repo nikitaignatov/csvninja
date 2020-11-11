@@ -112,6 +112,19 @@ export default {
         drawer: null,
         items: [
             {
+                text: 'Csv Conversion',
+                icon: 'mdi-chevron-up',
+                'icon-alt': 'mdi-chevron-down',
+                model: true,
+                children: [
+                    {
+                        icon: 'mdi-rotate-3d-variant',
+                        text: 'Transpose',
+                        to: { name: 'TransposeRowsToColumns' }
+                    }
+                ]
+            },
+            {
                 text: 'Time Series',
                 icon: 'mdi-chevron-up',
                 'icon-alt': 'mdi-chevron-down',
@@ -139,7 +152,7 @@ export default {
                             name: 'Sample',
                             params: { sample: 'accelerometer' }
                         }
-                    },
+                    },/*
                     {
                         icon: 'mdi-speedometer',
                         text: 'Speedometer',
@@ -165,7 +178,7 @@ export default {
                         icon: 'mdi-gauge',
                         text: 'Pressure',
                         to: { name: 'Sample', params: { sample: 'pressure' } }
-                    }
+                    }*/
                 ]
             }
         ]
