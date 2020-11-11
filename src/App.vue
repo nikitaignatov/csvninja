@@ -125,7 +125,7 @@ export default {
                 ]
             },
             {
-                text: 'Time Series',
+                text: 'Annotate Time Series',
                 icon: 'mdi-chevron-up',
                 'icon-alt': 'mdi-chevron-down',
                 model: true,
