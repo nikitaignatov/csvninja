@@ -8,6 +8,8 @@
 - Import data with existing labels
 - Export labels in csv format
 
+![csv transpose](/src/assets/annotate.gif "")
+
 ### Limitations
 - Interactive labeling is not functional on devices with touch interfaces.
 
