@@ -88,8 +88,8 @@
                 class="hidden-sm-and-down"
             ></v-text-field>
             <v-spacer></v-spacer>
-            <v-btn icon>
-                <v-icon>mdi-cog</v-icon>
+            <v-btn href="https://github.com/nikitaignatov/csvninja" icon>
+                <v-icon>mdi-github</v-icon>
             </v-btn>
         </v-app-bar>
         <v-main>
