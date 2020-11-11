@@ -15,8 +15,14 @@
 Csv ninja consists of different tools that you can try out using following links: 
 
 - [Data labeling tool](https://csv.ninja/data-labeling)
-- [Csv conversion](https://csv.ninja/conversion)
-- [Csv transformation](https://csv.ninja/data-transformation)
+
+## Csv conversions
+
+### [Transpose rows to columns](https://csv.ninja/csv/transpose-rows-to-columns)
+This feature allows user to transpose rows of a csv input to columns and the other way around.
+![csv transpose](/src/assets/transpose.gif "")
+
+
 
 ---
 
