@@ -73,7 +73,7 @@ export const labelIndex = function(headers, label = LABEL) {
 
 /** Adds a separate column for the labels and populates them with the default label if a label is missing. */
 export const addLabelColumn = function(xs, index, defaultLabel) {
-    const label = xs[index] || (xs[xs.length] = [LABEL]);
+    const label = xs[index] || (xs[xs.length] = []);
     if (xs.length > 1) {
         for (var i = 0; i < xs[0].length; i++) {
             if (!label[i]) {

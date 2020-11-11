@@ -1,5 +1,4 @@
-export const ACCELEROMETER = `
-Ax,Ay,Az
+export const ACCELEROMETER = `Ax,Ay,Az
 1,10,5
 2,2,44
 3,21,24
@@ -28,8 +27,7 @@ Ax,Ay,Az
 8,15,18
 `;
 
-export const RSSI = `
-RSSI
+export const RSSI = `RSSI
 79
 79
 80
@@ -41,8 +39,7 @@ RSSI
 71
 `;
 
-export const GYRO = `
-Gx,Gy,Gz
+export const GYRO = `Gx,Gy,Gz
 1,10,5
 2,2,44
 3,21,24
