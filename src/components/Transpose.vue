@@ -42,10 +42,6 @@ const transpose = input => {
 };
 
 export default {
-    name: 'Transpose',
-    props: {
-        msg: String
-    },
     methods: {
         zip: function(x) {
             this.output = transpose(x.target.value);
@@ -54,7 +50,6 @@ export default {
             this.input = transpose(x.target.value);
         }
     },
-    computed: {},
     data: function() {
         return {
             input: samples.GYRO,
