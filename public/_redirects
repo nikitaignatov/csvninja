@@ -1,0 +1,13 @@
+# Permanent redirects for the HTTP -> HTTPS
+http://csv.ninja/*          https://csv.ninja/:splat    301!
+http://www.csv.ninja/*      https://csv.ninja/:splat    301!
+http://csvninja.com/*       https://csv.ninja/:splat    301!
+http://www.csvninja.com/*   https://csv.ninja/:splat    301!
+
+# Permanent redirects for the domain aliases
+https://www.csv.ninja/*      https://csv.ninja/:splat    301!
+https://csvninja.com/*       https://csv.ninja/:splat    301!
+https://www.csvninja.com/*   https://csv.ninja/:splat    301!
+
+# Rewrite rules
+/*                          /    200
