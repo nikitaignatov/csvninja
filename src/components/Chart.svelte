@@ -4,5 +4,7 @@
 </script>
 
 {#if options}
-    <div use:chart={$options} />
+    <div>
+        <div use:chart={$options} />
+    </div>
 {/if}

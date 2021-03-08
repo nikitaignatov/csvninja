@@ -32,7 +32,7 @@
                 href="#"
                 class="flex items-center justify-center mr-10 text-base text-gray-700 text-opacity-90 font-medium tracking-tight hover:text-cool-gray-600 transition duration-150 ease-in-out"
             >
-                Product
+                Getting Started
                 <svg
                     class="w-3.5 h-4 ml-2"
                     fill="none"
@@ -52,7 +52,7 @@
                 href="#"
                 class="flex items-center justify-center mr-10 text-base text-gray-700 text-opacity-90 font-medium tracking-tight hover:text-cool-gray-600 transition duration-150 ease-in-out"
             >
-                Community
+                Examples
                 <svg
                     class="w-3.5 h-4 ml-2"
                     fill="none"
@@ -69,10 +69,10 @@
                 </svg>
             </a>
             <a
-                href="#"
+                href="https://github.com/nikitaignatov/csvninja" target="_blank"
                 class="flex items-center justify-center mr-10 text-base text-gray-700 text-opacity-90 font-medium tracking-tight hover:text-cool-gray-600 transition duration-150 ease-in-out"
             >
-                Plans
+                GitHub
             </a>
         </div>
     </div>
@@ -80,11 +80,11 @@
         <a
             href="#"
             class="mr-5 text-lg font-medium text-true-gray-800 hover:text-cool-gray-700 transition duration-150 ease-in-out"
-            >Login</a
+            >Learn</a
         >
         <button
             class="px-6 py-3 rounded-3xl font-medium bg-gradient-to-b from-gray-900 to-black text-white outline-none focus:outline-none hover:shadow-md hover:from-true-gray-900 transition duration-200 ease-in-out"
-            >Sign Up</button
+            >Share</button
         >
     </div>
 </div>

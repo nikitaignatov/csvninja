@@ -14,7 +14,7 @@
                 <span class="w-3 h-3 bg-green-400 rounded-full mr-2" />
             </div>
 
-            <div class="px-20 py-6">
+            <div class="px-10 py-6">
                 <slot />
             </div>
         </div>

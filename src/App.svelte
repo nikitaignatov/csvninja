@@ -17,9 +17,9 @@
     <Hero />
 
     <Chart />
-    <Transform bind:data={output} bind:summary bind:this={transformer} />
+    <!-- <Transform bind:data={output} bind:summary bind:this={transformer} />
     <Input />
-    <Output />
+    <Output /> -->
 </Layout>
 
 <style global lang="postcss">

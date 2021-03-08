@@ -4,6 +4,7 @@ import { writable, derived } from "svelte/store";
 import { sample } from "./Sample";
 
 
+export let simple = writable(true);
 export let annotations = writable([]);
 export let range = writable({ min: 0, max: 0 });
 export const inputCsv = writable(sample);
@@ -13,8 +14,9 @@ export const parsedData = derived(inputCsv, (x) => {
     const headers = dataset[0];
     const transposed = _.zip.apply(_, _.tail(dataset));
     const pairs = _.zip(headers, transposed);
-    const series = pairs.map(([name, data]) => ({ name, data }));
-    //    .filter((x) => _.includes(["Ax", "Ay", "Az"], x.name));
+    const series = pairs
+        .map(([name, data]) => ({ name, data }))
+        .filter((x) => !_.includes(["ts"], x.name));
     const yaxis = series.map((x) => ({
         show: false,
         seriesName: x.name,
@@ -27,6 +29,8 @@ export const parsedData = derived(inputCsv, (x) => {
 export let options = derived([parsedData, annotations], ([input, annotations]) => {
     console.log('update options', input, annotations)
 
+    let hidden = simple ? false : true
+
     const options = {
         yaxis: input.yaxis,
         series: input.series,
@@ -35,12 +39,13 @@ export let options = derived([parsedData, annotations], ([input, annotations]) =
             width: 1,
         },
         chart: {
+            height: '400px',
             animations: {
                 enabled: false,
             },
             type: "line",
             toolbar: {
-                show: true,
+                show: hidden,
                 offsetX: 0,
                 offsetY: 0,
                 tools: {
@@ -69,7 +74,7 @@ export let options = derived([parsedData, annotations], ([input, annotations]) =
                 },
             },
             zoom: {
-                enabled: true,
+                enabled: hidden,
                 type: "x",
             },
             events: {
@@ -83,8 +88,17 @@ export let options = derived([parsedData, annotations], ([input, annotations]) =
                 },
             },
         },
-        tolltip: {
-            enabled: false,
+        grid: {
+            show: hidden,
+        },
+        tooltip: {
+            enabled: true,
+            fixed: {
+                enabled: true,
+                position: 'topLeft',
+                offsetX: 0,
+                offsetY: 35,
+            },
         },
         annotations: {
             xaxis: annotations,
