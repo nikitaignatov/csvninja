@@ -1,10 +1,10 @@
 <script lang="ts">
-    import { inputCsv } from "./Store";
+    import { outputCsv } from "./Store";
 </script>
 
-<h3>Input Data</h3>
+<h3>Output Data</h3>
 <textarea
-    bind:value={$inputCsv}
+    bind:value={$outputCsv}
     class="w-full border-gray-300 rounded-lg border antialiased p-2"
     rows="10"
 />

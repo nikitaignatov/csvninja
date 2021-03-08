@@ -1,7 +1,8 @@
 <script>
     import { chart } from "svelte-apexcharts";
-    export let options ;
+    import { options } from "./Store";
 </script>
+
 {#if options}
-<div use:chart={options} />
+    <div use:chart={$options} />
 {/if}

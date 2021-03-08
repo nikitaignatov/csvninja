@@ -3,11 +3,10 @@
     import Nav from "./components/Nav.svelte";
     import Layout from "./components/Layout.svelte";
     import Input from "./components/Input.svelte";
+    import Output from "./components/Output.svelte";
     import Transform from "./components/Transform.svelte";
     import Hero from "./components/Hero.svelte";
-    import { sample } from "./components/Sample.svelte";
-    let output = sample;
-    let options;
+    let output;
 
     let summary;
     let transformer;
@@ -15,17 +14,12 @@
 
 <Layout>
     <Nav />
-    <Hero on:click={() => transformer.summarize()} />
+    <Hero />
 
-    <Chart bind:options />
-    <Transform
-        bind:data={output}
-        bind:options
-        bind:summary
-        bind:this={transformer}
-        separator="	"
-    />
-    <Input bind:value={output} on:change={() => transformer.summarize()} />
+    <Chart />
+    <Transform bind:data={output} bind:summary bind:this={transformer} />
+    <Input />
+    <Output />
 </Layout>
 
 <style global lang="postcss">
