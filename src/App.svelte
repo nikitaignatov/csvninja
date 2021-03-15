@@ -51,7 +51,7 @@
                 <Chart />
                 <Output />
             </Route>
-            <Route path="/labelling">
+            <Route path="/examples">
                 <p>No examples for now, sorry!</p>
             </Route>
         </div>
