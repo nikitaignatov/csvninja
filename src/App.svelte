@@ -3,7 +3,7 @@
 
     import Nav from "./components/Nav.svelte";
     import Layout from "./components/Layout.svelte";
-    import Input from "./components/Input.svelte";
+    import Input from "./components/input/Input.svelte";
     import Output from "./components/Output.svelte";
     import Transform from "./components/Transform.svelte";
     import Chart from "./components/Chart/Chart.svelte";
