@@ -22,7 +22,15 @@ export const parsedData = derived(inputCsv, (x) => {
         seriesName: x.name,
         opposite: true,
     }));
+    console.log(series)
     return { series, yaxis, dataset }
+});
+
+export const series = derived(parsedData, ({ series }) => {
+    return _.chain(series)
+        .keyBy('name')
+        .mapValues('data')
+        .value();
 });
 
 export let options = derived([parsedData, annotations], ([input, annotations]) => {
