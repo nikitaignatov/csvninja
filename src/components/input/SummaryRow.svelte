@@ -6,8 +6,8 @@
 </script>
 
 <tr>
-    <th class="border-dashed border-t border-gray-20">{name}</th>
+    <th class="border-b border-gray-20 p-2">{name}</th>
     {#each data ?? [] as item}
-        <td class="border-dashed border-t border-gray-20">{map(item)}</td>
+        <td class="border-b border-gray-20 p-2">{map(item)}</td>
     {/each}
 </tr>
