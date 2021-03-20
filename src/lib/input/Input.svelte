@@ -1,20 +1,12 @@
 <script lang="ts">
     import { inputCsv } from "../Store";
-    import { parsedData, series } from "../Store";
-    import Row from "./SummaryRow.svelte";
+    import { parsedData } from "../Store";
     import _ from "lodash";
-    import * as tf from "@tensorflow/tfjs";
-
-    let p = tf.tensor1d($parsedData.series[0].data);
-
-    p.max().print();
-    p.min().print();
-
-    console.log(p.max().toFloat());
+    import Row from "./SummaryRow.svelte";
     var summary = [
         { name: "Features", f: (x) => x.name },
-        { name: "Min", f: (x) => tf.tensor1d(x.data).min().toFloat() },
-        { name: "Max", f: (x) => tf.tensor1d(x.data).max() },
+        { name: "Min", f: (x) => _.min(x.data) },
+        { name: "Max", f: (x) => _.max(x.data) },
     ];
 </script>
 

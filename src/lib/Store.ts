@@ -1,9 +1,10 @@
 import _ from "lodash";
-import { parse, unparse } from "papaparse";
+import paraparse from "papaparse";
 import { writable, derived } from "svelte/store";
 import { sample } from "./Sample";
 import { getOptions } from "./Chart/options";
 
+const { parse, unparse } = paraparse
 export let simple = writable(true);
 export let annotations = writable([]);
 export let range = writable({ min: 0, max: 0 });
