@@ -7,9 +7,9 @@
         "start": "svelte-kit start"
     },
     "devDependencies": {
-        "@sveltejs/adapter-netlify": "^1.0.0-next.3",
-        "@sveltejs/adapter-static": "^1.0.0-next.3",
-        "@sveltejs/kit": "next",
+        "@sveltejs/adapter-netlify": "^1.0.0-next.4",
+        "@sveltejs/adapter-static": "^1.0.0-next.4",
+        "@sveltejs/kit": "^1.0.0-next.54",
         "@tensorflow/tfjs": "^3.3.0",
         "autoprefixer": "^10.2.5",
         "cssnano": "^4.1.10",
