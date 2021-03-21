@@ -1,20 +1,20 @@
-# create-svelte
+# [Csv Ninja](https://csv.ninja)
+csv.ninja is a tool for annotating sensor and time-series data.
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte);
+### Features
+- Interactive charts for annotation of sensor data
+- Import data with existing labels
+- Export labels in csv format
 
-## Creating a project
 
-If you're seeing this, you've probably already done this step. Congrats!
+## Dependency
+This projects is built using the following awesome libraries
 
-```bash
-# create a new project in the current directory
-npm init svelte@next
-
-# create a new project in my-app
-npm init svelte@next my-app
-```
-
-> Note: the `@next` is temporary
+- [Svelte](https://github.com/sveltejs/svelte)
+- [Tailwindcss](https://github.com/tailwindlabs/tailwindcss)
+- [ApexCharts](https://github.com/apexcharts/apexcharts.js)
+- [Lodash](https://github.com/lodash/lodash)
+- [PapaParse](https://github.com/mholt/PapaParse)
 
 ## Developing
 
