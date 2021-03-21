@@ -1,8 +1,13 @@
 <script>
-	import "../global.css";
+    import "../global.css";
+    import Layout from "../lib/Layout.svelte";
+    import Nav from "../lib/Nav.svelte";
 </script>
 
-<slot />
+<Layout>
+    <Nav />
+    <slot /></Layout
+>
 
 <style global lang="postcss">
     @tailwind base;

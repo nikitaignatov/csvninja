@@ -51,7 +51,7 @@ export const parsedData = derived(inputCsv, (x) => {
     const delimiter = result.meta.delimiter;
     const transposed = _.zip.apply(_, dataset);
     const pairs = _.zip(headers, transposed);
-    const series = pairs.map(([name, data]) => ({ name, data }));
+    const series = pairs.map(([name, data]) => ({ name, data })).filter(x=>x.name!=='ts');
     const yaxis = series.map((x) => ({
         show: false,
         seriesName: x.name,
