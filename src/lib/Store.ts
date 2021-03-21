@@ -1,31 +1,12 @@
 import _ from "lodash";
-import paraparse from "papaparse";
-import { writable, derived } from "svelte/store";
-import { sample } from "./Sample";
-import { getOptions } from "./Chart/options";
 
-const { parse, unparse } = paraparse
+import { writable, derived } from "svelte/store";
+import { getOptions } from "./Chart/options";
+import { parsedData, toCsv } from "./Csv";
+
 export let simple = writable(true);
 export let annotations = writable([]);
 export let range = writable({ min: 0, max: 0 });
-export const inputCsv = writable(sample);
-export const parsedData = derived(inputCsv, (x) => {
-    const result = parse(x, { dynamicTyping: true })
-    const dataset = result.data;
-    const headers = dataset[0];
-    const transposed = _.zip.apply(_, _.tail(dataset));
-    const pairs = _.zip(headers, transposed);
-    const series = pairs
-        .map(([name, data]) => ({ name, data }))
-        .filter((x) => !_.includes(["ts"], x.name));
-    const yaxis = series.map((x) => ({
-        show: false,
-        seriesName: x.name,
-        opposite: true,
-    }));
-    console.log(series)
-    return { series, yaxis, dataset }
-});
 
 export const series = derived(parsedData, ({ series }) => {
     return _.chain(series)
@@ -50,10 +31,8 @@ export let options = derived([parsedData, annotations], ([input, annotations]) =
 });
 
 export let outputCsv = derived([parsedData, annotations], ([input, annotations]) => {
-    const output = _.cloneDeep(input.dataset)
-    const label = (i) => {
-        return _.find(annotations, x => i >= x.x && i <= x.x2)?.label?.text ?? ''
-    }
+    const output = _.cloneDeep([input.headers].concat(input.dataset))
+    const label = (i) => _.find(annotations, x => i >= x.x && i <= x.x2)?.label?.text ?? ''
     output.map((x, i) => x.push(i === 0 ? 'label' : label(i)))
-    return unparse(output)
+    return toCsv(output)
 });

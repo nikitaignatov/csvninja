@@ -20,4 +20,4 @@
     collapseInlineTagWhitespace = true
     collapseWhitespace = true
     minifyJS = true
-    processScripts = [ "module" ]
+    processScripts = [ "module" ] # minify the script tags that are marked with type module.

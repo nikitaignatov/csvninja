@@ -1,6 +1,6 @@
 <script lang="ts">
-    import { inputCsv } from "../Store";
-    import { parsedData } from "../Store";
+    import { inputCsv } from "../Csv";
+    import { parsedData } from "../Csv";
     import _ from "lodash";
     import Row from "./SummaryRow.svelte";
     var summary = [

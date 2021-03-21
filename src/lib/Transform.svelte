@@ -1,6 +1,7 @@
 <script lang="ts">
     import _ from "lodash";
-    import { parsedData, options, range, annotations } from "./Store";
+    import { parsedData } from "./Csv";
+    import { range, annotations } from "./Store";
 
     export let separator;
 
@@ -69,8 +70,11 @@
     {/each}
 </div>
 
-<textarea on:keypress={assignLabels} on:load={assignLabels} 
-class="p-2 border border-gray-300 rounded-lg antialiased" />
+<textarea
+    on:keypress={assignLabels}
+    on:load={assignLabels}
+    class="p-2 border border-gray-300 rounded-lg antialiased"
+/>
 
 <button
     on:click={(e) => {

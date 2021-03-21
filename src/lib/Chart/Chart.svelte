@@ -6,10 +6,10 @@
     let options;
 
     onMount(async () => {
-        const module = await import("svelte-apexcharts");
-        const module2 = await import("../Store");
-        chart = module.chart;
-        options = module2.options;
+        const wrapper = await import("./wrapper");
+        const store = await import("../Store");
+        chart = wrapper.chart;
+        options = store.options;
     });
 </script>
 
