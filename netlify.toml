@@ -5,7 +5,7 @@
 
 [[plugins]]
   package = "netlify-plugin-minify-html"
-  
+
   [plugins.inputs]
     contexts = [
       'production',
@@ -19,4 +19,4 @@
     removeComments = true
     collapseInlineTagWhitespace = true
     collapseWhitespace = true
-    conservativeCollapse = true
+    minifyJS = true
