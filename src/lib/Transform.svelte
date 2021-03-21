@@ -3,8 +3,6 @@
     import { parsedData } from "./Csv";
     import { range, annotations } from "./Store";
 
-    export let separator;
-
     let labels = ["kettlebell-swing-up", "kettlebell-swing-down", "unknown"];
     let labelsText = labels.join("\n");
     let label;
@@ -47,9 +45,9 @@
 <!-- svelte-ignore a11y-no-onchange -->
 <select
     class="p-2 border border-gray-300 rounded-lg antialiased"
-    value={separator}
+    bind:value={$parsedData.delimiter}
     on:change={(e) => {
-        separator = e.target.value;
+        $parsedData.delimiter = e.target.value;
     }}
 >
     {#each separators as sep}
