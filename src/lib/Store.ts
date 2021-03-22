@@ -2,10 +2,11 @@ import _ from "lodash";
 
 import { writable, derived } from "svelte/store";
 import { getOptions } from "./Chart/options";
-import { parsedData, toCsv } from "./Csv";
+import { parsedData, toCsv } from "$lib/Csv/Csv";
 
 export let simple = writable(true);
 export let annotations = writable([]);
+
 export let range = writable({ min: 0, max: 0 });
 
 export const series = derived(parsedData, ({ series }) => {
@@ -15,13 +16,13 @@ export const series = derived(parsedData, ({ series }) => {
         .value();
 });
 
-export let options = derived([parsedData, annotations], ([input, annotations]) => {
+export let options = derived([parsedData, annotations], ([input, x]) => {
     return {
         yaxis: input.yaxis,
         series: input.series,
         ...getOptions({
             hidden: !simple,
-            annotations,
+            annotations: x,
             selection: function (chartContext, { xaxis, yaxis }) {
                 if (!yaxis) return;
                 range.set(xaxis);

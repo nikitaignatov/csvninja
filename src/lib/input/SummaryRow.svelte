@@ -1,8 +1,7 @@
 <script lang="ts">
-    import _ from "lodash";
-    export let name;
-    export let data;
-    export let map;
+    export let name: string;
+    export let data: any[];
+    export let map: (x: any) => number | string;
 </script>
 
 <tr>

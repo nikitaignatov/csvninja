@@ -1,12 +1,21 @@
 <script lang="ts">
     import _ from "lodash";
-    import { parsedData, inputCsv } from "../Csv";
+    import { parsedData, inputCsv } from "$lib/Csv/Csv";
     import Row from "./SummaryRow.svelte";
-    var summary = [
-        { name: "Features", f: (x) => x.name },
-        { name: "Min", f: (x) => _.min(x.data) },
-        { name: "Max", f: (x) => _.max(x.data) },
+    import Column from "./SummaryColumn.svelte";
+
+    let features = [
+        { name: "Features", map: (x) => x.name },
+        { name: "Min", map: (x) => _.min(x.data) },
+        { name: "Max", map: (x) => _.max(x.data) },
+        { name: "Mean", map: (x) => _.mean(x.data).toFixed(3) },
+        { name: "Empty", map: (x) => _.filter(x.data, _.isNull)?.length },
+        { name: "NaN", map: (x) => _.filter(x.data, _.isNaN)?.length },
+        { name: "Count", map: (x) => x.data?.length },
     ];
+
+    type display = "row" | "columns";
+    let show: display = "columns";
 </script>
 
 <div class="w-full">
@@ -18,22 +27,26 @@
     />
 </div>
 
-<div class="w-full">
-    <table
-        class="border-collapse text-left table-auto w-full whitespace-no-wrap bg-white table-striped relative"
-    >
-        {#each summary as item}
-            <Row name={item.name} data={$parsedData?.series} map={item.f} />
-        {/each}
-        <Row
-            name="Mean"
-            data={$parsedData?.series}
-            map={(x) => _.mean(x.data).toFixed(3)}
-        />
-        <Row
-            name="Count"
-            data={$parsedData?.series}
-            map={(x) => x.data.length}
-        />
-    </table>
-</div>
+{#if show === "columns"}
+    <div class="w-full">
+        <table
+            class="border-collapse text-left table-auto w-full whitespace-no-wrap bg-white table-striped relative"
+        >
+            <Column data={$parsedData?.series} bind:features />
+        </table>
+    </div>
+{:else if show === "row"}
+    <div class="w-full">
+        <table
+            class="border-collapse text-left table-auto w-full whitespace-no-wrap bg-white table-striped relative"
+        >
+            {#each features as item}
+                <Row
+                    name={item.name}
+                    data={$parsedData?.series}
+                    map={item.map}
+                />
+            {/each}
+        </table>
+    </div>
+{/if}
