@@ -28,7 +28,7 @@
 </div>
 
 {#if show === "columns"}
-    <div class="w-full">
+    <div class="w-full overflow-x-scroll">
         <table
             class="border-collapse text-left table-auto w-full whitespace-no-wrap bg-white table-striped relative"
         >

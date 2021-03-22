@@ -1,4 +1,4 @@
-import { reduce, flatten, values, zip } from "lodash";
+import _ from "lodash";
 import paraparse from "papaparse";
 const { parse, unparse } = paraparse // TODO: figure out why destructuring fails, when doing it in the import statement.
 
@@ -29,9 +29,9 @@ export const parseCsv = function (input) {
     const result: ParseResult<any> = parse(input, options);
 
     return {
-        data: (result.data.map(values) as any[]),
-        errors: result.errors,
-        meta: result.meta
+        data: (result.data.map(_.values) as any[]),
+        meta: result.meta,
+        errors: result.errors
     }
 }
 
@@ -40,7 +40,7 @@ export const parseCsv = function (input) {
  */
 export const inputCsv = writable<string>(sample);
 export const annotationRanges = function (dataset) {
-    let { labels, current } = reduce(dataset, ((acc, value, key) => {
+    let { labels, current } = _.reduce(dataset, ((acc, value, key) => {
         if (value[7]) {
             if (acc.current && acc.current.id === value[7]) {
                 acc.current['x2'] = value[0]
@@ -83,10 +83,10 @@ export const parsedData = derived(inputCsv, (x) => {
     const dataset = result.data;
     const headers = result.meta.fields ?? [];
     const delimiter = result.meta.delimiter;
-    const transposed = zip.apply(x => x, dataset);
-    const pairs = zip(headers, transposed);
+    const transposed = _.zip.apply(_, dataset);
+    const pairs = _.zip(headers, transposed);
     const series = pairs.map(([name, data]) => ({ name, data })).filter(x => x.name !== 'ts');
-    const labels: any[] = flatten(values(annotationRanges(dataset)))
+    const labels: any[] = [] || _.flatten(_.values(annotationRanges(dataset)))
     const yaxis = series.map((x) => ({
         show: false,
         seriesName: x.name,
