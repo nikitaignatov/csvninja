@@ -6,12 +6,16 @@ import type { ParseResult } from "papaparse";
 import { writable, derived } from "svelte/store";
 import { sample } from "./Sample";
 
+let delimiter = ','
+
 /**
  * Converts a 2 dimensional array to csv with default configuration
  * @param input 2 dimensional array
  * @returns csv string
  */
-export const toCsv = (input) => unparse(input);
+export const toCsv = (input) => unparse(input, {
+    delimiter
+});
 
 /**
  * config docs: https://www.papaparse.com/docs#config
@@ -27,6 +31,7 @@ export const parseCsv = function (input) {
         transform: (value) => value.trim()
     }
     const result: ParseResult<any> = parse(input, options);
+    delimiter = result.meta.delimiter
 
     return {
         data: (result.data.map(_.values) as any[]),
@@ -39,13 +44,14 @@ export const parseCsv = function (input) {
  * The raw input csv value
  */
 export const inputCsv = writable<string>(sample);
-export const annotationRanges = function (dataset) {
+export const annotationRanges = function (dataset, fields: string[]) {
+    const i = fields.indexOf('label')
     let { labels, current } = _.reduce(dataset, ((acc, value, key) => {
-        if (value[7]) {
-            if (acc.current && acc.current.id === value[7]) {
+        if (value[i]) {
+            if (acc.current && acc.current.id === value[i]) {
                 acc.current['x2'] = value[0]
                 acc.current['index2'] = key
-            } else if (acc.current && acc.current.id !== value[7]) {
+            } else if (acc.current && acc.current.id !== value[i]) {
                 const id = acc.current.id
                 if (acc.labels[id]) {
                     acc.labels[id].push({ ...acc.current })
@@ -54,11 +60,11 @@ export const annotationRanges = function (dataset) {
                 }
                 acc.current = undefined
             } else {
-                acc.current = { x: value[0], id: value[7], index: key }
+                acc.current = { x: value[0], id: value[i], index: key }
             }
         } else {
             if (acc.current) {
-                acc.labels[acc.current.id].push({ ...acc.current })
+                acc.labels[acc.current.id]?.push({ ...acc.current })
                 acc.current = undefined
             }
         }
@@ -86,11 +92,12 @@ export const parsedData = derived(inputCsv, (x) => {
     const transposed = _.zip.apply(_, dataset);
     const pairs = _.zip(headers, transposed);
     const series = pairs.map(([name, data]) => ({ name, data })).filter(x => x.name !== 'ts');
-    const labels: any[] = [] || _.flatten(_.values(annotationRanges(dataset)))
+    const labels: any[] = _.flatten(_.values(annotationRanges(dataset, headers)))
     const yaxis = series.map((x) => ({
         show: false,
         seriesName: x.name,
         opposite: true,
     }));
+    console.log(labels)
     return { series, yaxis, dataset, headers, delimiter, labels }
 });

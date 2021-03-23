@@ -34,6 +34,11 @@
             {item}
         </button>
     {/each}
+    {#if $range}
+        [{Math.round($range?.min)}, {Math.round($range?.max)}] = {Math.round(
+            $range?.max - $range?.min
+        )}
+    {/if}
 </div>
 <div class="w-full">
     <textarea
@@ -44,9 +49,3 @@
         class="p-2 border border-gray-300 rounded-lg antialiased  w-full"
     />
 </div>
-<hr />
-{#if $range}
-    [{Math.round($range?.min)}, {Math.round($range?.max)}] = {Math.round(
-        $range?.max - $range?.min
-    )}
-{/if}

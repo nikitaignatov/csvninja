@@ -66,8 +66,8 @@ export const getOptions = ({ hidden, selection, annotations }) => ({
         showForSingleSeries: false,
         showForNullSeries: true,
         showForZeroSeries: true,
-        position: 'bottom',
-        horizontalAlign: 'center',
+        position: 'top',
+        horizontalAlign: 'right',
         floating: false,
         fontSize: '26px',
         fontFamily: 'Helvetica, Arial',
@@ -84,7 +84,7 @@ export const getOptions = ({ hidden, selection, annotations }) => ({
     xaxis: {
         type: "numeric",
         axisBorder: {
-            show: false,
+            show: hidden,
             color: '#78909C',
             height: 1,
             width: '100%',
