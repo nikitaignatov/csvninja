@@ -61,7 +61,35 @@ export const getOptions = ({ hidden, selection, annotations }) => ({
     annotations: {
         xaxis: annotations,
     },
+    legend: {
+        show: true,
+        showForSingleSeries: false,
+        showForNullSeries: true,
+        showForZeroSeries: true,
+        position: 'bottom',
+        horizontalAlign: 'center',
+        floating: false,
+        fontSize: '26px',
+        fontFamily: 'Helvetica, Arial',
+        fontWeight: 400,
+        labels: {
+            colors: undefined,
+            useSeriesColors: true
+        },
+        itemMargin: {
+            horizontal: 10,
+            vertical: 2
+        },
+    },
     xaxis: {
         type: "numeric",
+        axisBorder: {
+            show: false,
+            color: '#78909C',
+            height: 1,
+            width: '100%',
+            offsetX: 0,
+            offsetY: 0
+        },
     },
 })

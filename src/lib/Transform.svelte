@@ -35,12 +35,15 @@
         </button>
     {/each}
 </div>
-
-<textarea
-    on:input={assignLabels}
-    on:load={assignLabels}
-    class="p-2 border border-gray-300 rounded-lg antialiased"
-/>
+<div class="w-full">
+    <textarea
+        rows="5"
+        on:input={assignLabels}
+        on:load={assignLabels}
+        bind:value={labelsText}
+        class="p-2 border border-gray-300 rounded-lg antialiased  w-full"
+    />
+</div>
 <hr />
 {#if $range}
     [{Math.round($range?.min)}, {Math.round($range?.max)}] = {Math.round(
